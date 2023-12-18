@@ -1,0 +1,88 @@
+local addonName, ptable = ...
+ptable.CONST = {}
+local C = ptable.CONST
+
+-- Updated for 7.0.3
+-- Enum.ItemClass / Enum.ItemWeaponSubclass / Enum.ItemArmorSubclass / Enum.ItemGemSubclass
+C.armor, C.weapon = {}, {}
+for k = 0, 20 do
+	C.weapon[k] = GetItemSubClassInfo(Enum.ItemClass.Weapon,k)
+end
+for k = 1, 6 do
+	C.armor[k] = GetItemSubClassInfo(Enum.ItemClass.Armor,k)
+end
+
+C.WEAPONLABEL = GetItemClassInfo(Enum.ItemClass.Weapon)
+C.ARMORLABEL = GetItemClassInfo(Enum.ItemClass.Armor)
+C.JEWELRY = {['INVTYPE_FINGER']='', ['INVTYPE_NECK']=''}
+
+-- Most of the constants are never used but it's convinient to have them here as a reminder and shortcut
+C.ITEMS = {
+	['One-Handed Axes']   = C.weapon[0],
+	['Two-Handed Axes']   = C.weapon[1],
+	['Bows'] 			  = C.weapon[2],
+	['Guns'] 			  = C.weapon[3],
+	['One-Handed Maces']  = C.weapon[4],
+	['Two-Handed Maces']  = C.weapon[5],
+	['Polearms'] 		  = C.weapon[6],
+	['One-Handed Swords'] = C.weapon[7],
+	['Two-Handed Swords'] = C.weapon[8],
+	['Warglaive'] 		  = C.weapon[9],
+	['Staff'] 			  = C.weapon[10],
+	['Daggers'] 		  = C.weapon[15],
+	['Crossbows'] 		  = C.weapon[18],
+	
+	--[[ armor  ]]
+
+	['Cloth'] = C.armor[1],
+	['Leather'] = C.armor[2],
+	['Mail'] = C.armor[3],
+	['Plate'] = C.armor[4],
+	['Shields'] = C.armor[6], -- from 5.4 '6' is a cosmetic
+	--[[3rd slot
+	['Librams'] = C.armor[7],
+	['Idols'] = C.armor[8],
+	['Totems'] = C.armor[9],
+	]]--
+}
+
+C.SLOTS = {
+	["INVTYPE_AMMO"]={"AmmoSlot"},
+	["INVTYPE_HEAD"]={"HeadSlot"},
+	["INVTYPE_NECK"]={"NeckSlot"},
+	["INVTYPE_SHOULDER"]={"ShoulderSlot"},
+	["INVTYPE_CHEST"]={"ChestSlot"},
+	["INVTYPE_WAIST"]={"WaistSlot"},
+	["INVTYPE_LEGS"]={"LegsSlot"},
+	["INVTYPE_FEET"]={"FeetSlot"},
+	["INVTYPE_WRIST"]={"WristSlot"},
+	["INVTYPE_HAND"]={"HandsSlot"}, 
+	["INVTYPE_FINGER"]={"Finger0Slot", "Finger1Slot"}, 
+	["INVTYPE_TRINKET"]={"Trinket0Slot", "Trinket1Slot"},
+	["INVTYPE_CLOAK"]={"BackSlot"},
+
+	["INVTYPE_WEAPON"]={"MainHandSlot", "SecondaryHandSlot"},
+	["INVTYPE_2HWEAPON"]={"MainHandSlot"},
+	["INVTYPE_RANGED"]={"MainHandSlot"},
+	["INVTYPE_RANGEDRIGHT"]={"MainHandSlot"},
+	["INVTYPE_WEAPONMAINHAND"]={"MainHandSlot"}, 
+	["INVTYPE_SHIELD"]={"SecondaryHandSlot"},
+	["INVTYPE_WEAPONOFFHAND"]={"SecondaryHandSlot"},
+	["INVTYPE_HOLDABLE"]={"SecondaryHandSlot"}
+}
+
+
+--[[ 
+from GlobalStrings.lua
+ITEM_MOD_CRIT_RATING_SHORT = "Critical Strike";
+ITEM_MOD_DODGE_RATING_SHORT = "Dodge";
+ITEM_MOD_PARRY_RATING_SHORT = "Parry";
+
+ITEM_MOD_EXPERTISE_RATING_SHORT = "Expertise";
+ITEM_MOD_HASTE_RATING_SHORT = "Haste";
+ITEM_MOD_HIT_RATING_SHORT = "Hit";
+
+ITEM_MOD_MASTERY_RATING_SHORT = "Mastery";
+ITEM_MOD_SPELL_PENETRATION_SHORT = "Spell Penetration";
+ITEM_MOD_SPELL_POWER_SHORT = "Spell Power";
+]]--

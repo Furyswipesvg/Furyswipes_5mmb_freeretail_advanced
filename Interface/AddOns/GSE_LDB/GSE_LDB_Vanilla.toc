@@ -1,0 +1,11 @@
+## Interface: 11500
+
+
+## Title: |cff0000FFGSE:|r |cFF00D1FFLDB|r
+## Notes: LibDataBroker Plugin for GSE
+## Author: TimothyLuke
+## Version: 3.1.50
+## Dependencies: GSE
+## IconTexture: Interface\Addons\GSE_GUI\Assets\GSE_Logo_Dark_512
+
+LDBProvider.lua

@@ -1,0 +1,25 @@
+# YOU MUST EDIT THIS FILE TO MULTIBOX
+# Each wow window is defined by a box command. (max 5)
+# The box command starts with the word box.
+# Then battlenet account.
+# Then password.
+# Then subscription name
+# Then toon name.
+# Then role: tank / melee / healer / caster / hunter
+# You may add letters at the end 
+# to launch certain boxes when you hit ctrl-alt-<letter>
+# The letters are like their raid identifier. Example--The f
+# at the end of furyswipes line means ctrl-alt-f only opens him
+# Each toon can be in many different raids. 
+# ALL BOXES ARE IN RAID m by default. This cannot be changed!
+# ctrl alt m launches all your guys.
+# NO ALT (special) CHARACTERS ALLOWED IN TOON NAMES!!! ONLY A-Z
+
+box wowaccount@gmail.net PaSsWoRd sixtyforever cheat tank f
+box wowaccount@gmail.net PaSsWoRd toddtope btfo caster
+box wowaccount@gmail.net PaSsWoRd neeks1 married healer
+box wowaccount@gmail.net PaSsWoRd wow1 psh caster
+box wowaccount@gmail.net PaSsWoRd elitope coolness caster
+
+# REMOVE OR COMMENT OUT UNUSED BOX COMMANDS!!!
+# Ex: If you are 2-boxing, you should have only two box commands.
