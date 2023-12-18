@@ -15,11 +15,11 @@
 # ctrl alt m launches all your guys.
 # NO ALT (special) CHARACTERS ALLOWED IN TOON NAMES!!! ONLY A-Z
 
-box wowaccount@gmail.net PaSsWoRd sixtyforever cheat tank f
-box wowaccount@gmail.net PaSsWoRd toddtope btfo caster
-box wowaccount@gmail.net PaSsWoRd neeks1 married healer
-box wowaccount@gmail.net PaSsWoRd wow1 psh caster
-box wowaccount@gmail.net PaSsWoRd elitope coolness caster
+box wowaccount@gmail.net PaSsWoRd wow1 cheat tank f
+box wowaccount@gmail.net PaSsWoRd wow2 btfo caster
+box wowaccount@gmail.net PaSsWoRd wow3 married healer
+box wowaccount@gmail.net PaSsWoRd wow4 psh caster
+box wowaccount@gmail.net PaSsWoRd wow5 coolness caster
 
 # REMOVE OR COMMENT OUT UNUSED BOX COMMANDS!!!
 # Ex: If you are 2-boxing, you should have only two box commands.
