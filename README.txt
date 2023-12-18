@@ -1,5 +1,6 @@
 HOW TO RUN 5-Minute Multiboxing:
 Remove geforce experience.
+Use provide xmouse controls to set "Activate Window Tracking" to 30 and apply.
 Set Read_Toonlist.bat to run as Administrator
 Set HotKeyNet.exe to run as Administrator
 May work anyway if you don't.
