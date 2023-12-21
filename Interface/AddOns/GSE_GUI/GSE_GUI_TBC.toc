@@ -4,7 +4,7 @@
 ## Title: |cff0000ffGSE:|r |cFF00D1FFGUI|r
 ## Notes: GSE GUI
 ## Author: TimothyLuke
-## Version: 3.1.50
+## Version: 3.1.51
 ## Dependencies: GSE
 ## LoadOnDemand: 1
 ## IconTexture: Interface\Addons\GSE_GUI\Assets\GSE_Logo_Dark_512

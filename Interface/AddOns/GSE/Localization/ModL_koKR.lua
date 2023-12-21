@@ -85,6 +85,10 @@ L["Add WeakAura"] = "WeakAura 추가"
 L["Addin Version %s contained versions for the following macros:"] = "버전 %s에는 다음 매크로에 대한 버전이 포함되어 있습니다:"
 L["All macros are now stored as upper case names.  You may need to re-add your old macros to your action bars."] = "모든 매크로는 이제 대문자 이름으로 저장됩니다. 행동 단축바에 이전 매크로를 다시 추가해야 할 수도 있습니다."
 L["Alt Keys."] = "Alt 키"
+--[[Translation missing --]]
+L["Alwaus use the highest rank of spell available.  This is useful for levelling."] = "Alwaus use the highest rank of spell available.  This is useful for levelling."
+--[[Translation missing --]]
+L["Always use Max Rank"] = "Always use Max Rank"
 L["Any Alt Key"] = "Alt 키"
 L["Any Control Key"] = "Ctrl 키"
 L["Any Shift Key"] = "Shift 키"

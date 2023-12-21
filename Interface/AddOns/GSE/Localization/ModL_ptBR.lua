@@ -87,6 +87,10 @@ L["Add WeakAura"] = "Add WeakAura"
 L["Addin Version %s contained versions for the following macros:"] = "A versão %s adicionada continha versões para as seguintes macros:"
 L["All macros are now stored as upper case names.  You may need to re-add your old macros to your action bars."] = "Todas as macros agora são armazenadas com nomes em maiúsculas. Pode ser necessário adicionar novamente as macros antigas às barras de ação."
 L["Alt Keys."] = "Teclas Alt."
+--[[Translation missing --]]
+L["Alwaus use the highest rank of spell available.  This is useful for levelling."] = "Alwaus use the highest rank of spell available.  This is useful for levelling."
+--[[Translation missing --]]
+L["Always use Max Rank"] = "Always use Max Rank"
 L["Any Alt Key"] = "Qualquer Tecla Alt"
 L["Any Control Key"] = "Qualquer Tecla Ctrl"
 L["Any Shift Key"] = "Qualquer Tecla Shift"

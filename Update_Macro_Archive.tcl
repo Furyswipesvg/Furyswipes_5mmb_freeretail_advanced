@@ -116,6 +116,7 @@ if { [info exists sname] && [info exists class("$sname") ] && [info exists specs
 }
 }
 set names ""
+set all_macros true
 foreach fl [glob WTF/Account/*/SavedVariables/GSE.lua] {
 set fL [open $fl r]
 set found_macros false
@@ -129,8 +130,9 @@ while { [gets $fL line] >= 0 } {
 	if {$found_macros} { 
 		if { [regexp {^\s*\[\".*_.*_} $line] } {
 	                regexp {\["(\S+)\"\]} $line match macname
-			set macname [string tolower $macname]
-			if { [lsearch $names $macname] == -1 } { 
+			if { [regexp {[a-z]} $macname] } { continue }
+			set macname [string toupper $macname]
+			if { $all_macros || [lsearch $names $macname] == -1 } { 
 			  lappend macros $line
 			  lappend names $macname
 		        }

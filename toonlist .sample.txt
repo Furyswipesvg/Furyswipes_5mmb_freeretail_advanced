@@ -14,9 +14,11 @@
 # ALL BOXES ARE IN RAID m by default. This cannot be changed!
 # ctrl alt m launches all your guys.
 # NO ALT (special) CHARACTERS ALLOWED IN TOON NAMES!!! ONLY A-Z
+# add the servername after  the toon name if they will be on different
+# servers from each other using a dash (see example below)
 
-box wowaccount@gmail.net PaSsWoRd wow1 cheat tank f
-box wowaccount@gmail.net PaSsWoRd wow2 btfo caster
+box wowaccount@gmail.net PaSsWoRd wow1 cheat-bladefist tank f
+box wowaccount@gmail.net PaSsWoRd wow2 btfo-nathrezim caster
 box wowaccount@gmail.net PaSsWoRd wow3 married healer
 box wowaccount@gmail.net PaSsWoRd wow4 psh caster
 box wowaccount@gmail.net PaSsWoRd wow5 coolness caster

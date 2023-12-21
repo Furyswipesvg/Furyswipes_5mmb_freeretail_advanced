@@ -1,4 +1,4 @@
-set version 110619_retail
+set version 121923_retail
 lappend auto_path twapi
 package require twapi_input
 set kb [string tolower [twapi::get_keyboard_layout_name]]
@@ -14,7 +14,7 @@ set display [twapi::get_display_size]
 array unset toons
 array unset autodelete
 array unset levelingparty
-set winswapkeys "NumpadEnd NumpadDown NumpadPgDn NumpadLeft Clear"
+set winswapkeys "NumpadEnd NumpadDown NumpadPgDn NumpadLeft Clear NumpadRight NumpadHome NumpadUp NumpadPgUp NumpadInsert"
 set dontsoulstone ""
 set hideframes ""
 set fixunused ""
@@ -114,7 +114,7 @@ while { [gets $tL line] >= 0 } {
   if { [string index $line 0] != "#" } {
     if { [string tolower [lindex $line 0]] == "box" } {
       if { [llength $line] < 6 } { puts "ERROR: box takes 5 or 6 arguments in toonlist line $line" ; puts "hit any key to return" ; gets stdin char ; return }
-      if { $numtoons==5 } { puts "ERROR: Only 5 box commands per toonlist for now." ; return }
+      #if { $numtoons==5 } { puts "ERROR: Only 5 box commands per toonlist for now." ; return }
       set bnet_account [lindex $line 1] 
       set passwd [lindex $line 2] 
       set license [lindex $line 3]
@@ -418,8 +418,8 @@ puts $hK {
 	<SendPC %1%> 
 	<TargetWin %2%>
 	<SetForegroundWin>
-	<SetWinSize %5% %6%>
-	<SetWinPos %7% %8%>
+	<SetWinSize %3% %4%>
+	<SetWinPos %5% %6%>
 
 // This is your first HOTKEY. That's a key combo that only works when scroll_lock is on.
 // In this case that combo is Alt-Ctrl-m (case doesn't matter)
@@ -468,6 +468,7 @@ if { $use2monitors } {
 	set raidhash(4) {{1920 1080 3840 0 } {1920 1080 5760 0 } {1920 1080 3840 1080} {1920 1080 5760 1080}}
 	set raidhash(5) {{1920 1440 960 720 } {960 720 0 720} {960 720 960 0} {960 720 1920 0} {960 720 2880 720 }}
 	set raidhash(10) {{1280 1020 0 960} {1280 1020 1280 960} {1280 1020 2560 960} {640 480 640 0} {640 480 0 0} {640 480 0 480} {640 480 1280 0} {640 480 640 480} {640 480 1280 480} {640 480 1920 480}}
+	set raidhash(10) {{2240 1680 0 480} {640 480 0 0} {640 480 640 0} {640 480 1280 0} {640 480 1920 0} {640 480 2560 0} {640 480 3200 0} {640 480 2240 480} {640 480 2880 480} {1420 1065 2240 960}}
 	set raidhash(20) {{640 480 0 0} {960 720 0 1440} {960 720 960 1440} {960 720 1920 1440} {640 480 640 0} {640 480 1280 0} {640 480 1920 0} {640 480 2560 0} {640 480 3200 0} {640 480 0 480} {640 480 640 480} {640 480 1280 480} {640 480 1920 480} {640 480 2560 480} {640 480 3200 480} {640 480 0 960} {640 480 640 960} {640 480 1280 960} {640 480 1920 960 } {640 480 2560 960}} 
 	set raidhash(25) {{533 430 1548 0} {1548 1290 0 860} {533 430 1548 430} {533 430 1548 860} {533 430 1548 1290} {533 430 1548 1720} {533 430 2081 0} {533 430 2081 430} {533 430 2081 860} {533 430 2081 1290} {533 430 2081 1720} {533 430 2614 0} {533 430 2614 430} {533 430 2614 860} {533 430 2614 1290} {533 430 2614 1720} {533 430 3147 0} {533 430 3147 430} {533 430 3147 860} {533 430 3147 1290} {533 430 3147 1720} {533 430 482 0} {533 430 1015 0} {533 430 482 430} {533 430 1015 430}}
 	set raidhash(40) {{480 360 0 0} {1440 1080 960 1080} {480 360 480 0} {480 360 960 0} {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} {480 360 1920 360} {480 360 2400 360} {480 360 2880 360} {480 360 3360 360} {480 360 0 720} {480 360 480 720} {480 360 960 720} {480 360 1440 720} {480 360 1920 720} {480 360 2400 720} {480 360 2880 720} {480 360 3360 720} {480 360 0 1080} {480 360 480 1080} {480 360 2400 1080} {480 360 2880 1080} {480 360 3360 1080} {480 360 0 1440} {480 360 480 1440} {480 360 2400 1440} {480 360 2880 1440} {480 360 3360 1440} {480 360 0 1800} {480 360 480 1800} {480 360 2400 1800} {480 360 2880 1800} {480 360 3360 1800}}
@@ -679,7 +680,7 @@ if { $use2monitors } {
 	  	set account [lindex $thistoon 1]
 	  	set passwd [lindex $thistoon 2]
 	  	set winname ${toonname}_${cpunum}$acct_winname($account)
-	  	puts $hK "  <ResetWindowPosition $computer($cpunum) $winname $bnet_account $passwd  [lindex $raidhash($windowcount($myraid)) $windex($myraid)]>"
+	  	puts $hK "  <ResetWindowPosition $computer($cpunum) $winname [lindex $raidhash($windowcount($myraid)) $windex($myraid)]>"
 			incr windex($myraid)
 		}
 	}
@@ -760,14 +761,24 @@ if { $use2monitors } {
 				set win2 [list [lindex $winset 2 ]]
 				set win3 [list [lindex $winset 3 ]]
 				set win4 [list [lindex $winset 4 ]]
+				set win5 [list [lindex $winset 5 ]]
+				set win6 [list [lindex $winset 6 ]]
+				set win7 [list [lindex $winset 7 ]]
+				set win8 [list [lindex $winset 8 ]]
+				set win9 [list [lindex $winset 9 ]]
 				set swaplist [list \
-					"$win0 $win1 $win2 $win3 $win4" \
-					"$win1 $win0 $win2 $win3 $win4" \
-					"$win2 $win1 $win0 $win3 $win4" \
-					"$win3 $win1 $win2 $win0 $win4" \
-					"$win4 $win1 $win2 $win3 $win0" \
+					"$win0 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9" \
+					"$win1 $win0 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9" \
+					"$win2 $win1 $win0 $win3 $win4 $win5 $win6 $win7 $win8 $win9" \
+					"$win3 $win1 $win2 $win0 $win4 $win5 $win6 $win7 $win8 $win9" \
+					"$win4 $win1 $win2 $win3 $win0 $win5 $win6 $win7 $win8 $win9" \
+					"$win5 $win1 $win2 $win3 $win4 $win0 $win6 $win7 $win8 $win9" \
+					"$win6 $win1 $win2 $win3 $win4 $win5 $win0 $win7 $win8 $win9" \
+					"$win7 $win1 $win2 $win3 $win4 $win5 $win6 $win0 $win8 $win9" \
+					"$win8 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win0 $win9" \
+					"$win9 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win0" \
 					]
-	  			puts $hK "<ResetWindowPosition $computer($cpunum) $winname null null [lindex $swaplist $x $windex($myraid) ]>"
+	  			puts $hK "<ResetWindowPosition $computer($cpunum) $winname [lindex $swaplist $x $windex($myraid) ]>"
 				incr windex($myraid)
 			}
 			puts $hK "<RestoreMousePos>"
@@ -827,7 +838,17 @@ if { $use2monitors } {
 <Hotkey ScrollLockOn Numpad4>
 	<DoHotKey Hotkey ScrollLockOn NumpadLeft>
 <Hotkey ScrollLockOn Numpad5>
-	<DoHotkey Hotkey ScrollLockOn Clear>}
+	<DoHotkey Hotkey ScrollLockOn Clear>
+<Hotkey ScrollLockOn Numpad6>
+	<DoHotkey Hotkey ScrollLockOn NumpadRight>
+<Hotkey ScrollLockOn Numpad7>
+	<DoHotkey Hotkey ScrollLockOn NumpadHome>
+<Hotkey ScrollLockOn Numpad8>
+	<DoHotkey Hotkey ScrollLockOn NumpadUp>
+<Hotkey ScrollLockOn Numpad9>
+	<DoHotkey Hotkey ScrollLockOn NumpadPgUp>
+<Hotkey ScrollLockOn Numpad0>
+	<DoHotkey Hotkey ScrollLockOn NumpadInsert>}
 	puts $hK ""
 	puts $hK {// This is the hotkey that closes all windows-- Ctrl-Alt-o (letter O)	}
 	puts $hK "<Hotkey ScrollLockOn Alt Ctrl o>"
@@ -875,8 +896,18 @@ if { $use2monitors } {
 	#puts $hK ""
 	puts $hK "<UseKeyAsModifier $oem>"
 	puts $hK "<Hotkey ScrollLockOn $oem LButton, RButton, Button4, Button5>"
+
 	puts $hK $winlabels
-	puts $hK {      <ClickMouse %TriggerMainKey% scale>}
+	#puts $hK {      <Cancel>}
+	puts $hK {      <SaveMousePos>}
+	#foreach label [split $winlabels ","] {
+	  #set label [regsub {\>$} $label ""]
+	  #if { ![regexp {^w} $label] } { continue } 
+	  #puts $hK "      <SendLabel $label> <ClickMouse %TriggerMainKey% >"
+        #}
+	puts $hK {      <ClickMouse %TriggerMainKey% >}
+	puts $hK {      <ClickMouse %TriggerMainKey% >}
+	puts $hK {      <RestoreMousePos>}
 	puts $hK ""
 	#puts $hK "<CreateColoredButton clique $clique_overlay 0x101010 0x101010>"
 	puts -nonewline $hK {<Hotkey ScrollLockOn LButton, MButton, RButton, Button4, Button5>
@@ -907,7 +938,7 @@ if { $use2monitors } {
 // Notice there is an exception list at the end.
 // The word %Trigger% gets replaced with whatever key you clicked.
 //-----------------------------------------------------------
-<Hotkey ScrollLockOn A-Z, 1-9, Shift, Ctrl, Alt, Plus, Minus, Esc , Divide, F1-F12 except 1-6,F7,F9,F10,E,F,Q,H, W, A, S, D, R, T, Y, I, U, J, V>}
+<Hotkey ScrollLockOn A-Z, 1-9, Shift, Ctrl, Alt, Plus, Minus, Esc , Divide, F1-F12 except 1-6,E,F,Q,H, W, A, S, D, R, T, Y, I, U, J, V>}
 	puts $hK $winlabels
 	puts $hK { <Key %Trigger%>}
 	puts $hK ""
@@ -1082,31 +1113,7 @@ puts $hK {//-------------------------------------------------------------
 <Hotkey ScrollLockOn 0>
 	<SendFocusWin>
 	<Key 0>
-
-// Another trick key--when you hit F9, don't hit F9.
-// Instead, cycle through Shift-F1-F6, where you put some buffing macros.
-// This is called round-robin, and is accomplished through the toggle keyword.
-// You can do amazing things with your toggle.
-<Hotkey F9>
-	<Toggle>}
-	puts $hK $winlabels
-	puts $hK {	<Key Shift F1>}
-	puts $hK {	<Toggle>}
-	puts $hK $winlabels
-	puts $hK {	<Key Shift F2>}
-	puts $hK {	<Toggle>}
-	puts $hK $winlabels
-	puts $hK {	<Key Shift F3>}
-	puts $hK {	<Toggle>}
-	puts $hK $winlabels
-	puts $hK {	<Key Shift F4>}
-	puts $hK {	<Toggle>}
-	puts $hK $winlabels
-	puts $hK {	<Key Shift F5>}
-	puts $hK {	<Toggle>}
-	puts $hK $winlabels
-	puts $hK {	<Key Shift F6>}
-	puts $hK ""
+}
 	puts $hK {// More magic. I redefined alt-1
 // When you hit it, it will send alt-1 AND F11 (which is a macro that says /assist Furyswipes)
 // So alt-1 forces people to assist main.
@@ -1136,13 +1143,13 @@ puts $hK {//-------------------------------------------------------------
   			set acct_winname($account) ${acctnick}
   			puts $hK "\t<if MouseIsOverWindow ${toonname}_${mycomp}${acctnick}>"
 			puts $hK $winlabels
-			puts $hK "\t<Key ctrl f[expr 8+$totallabels]>"
+			puts $hK "\t<Key ctrl f[expr 3+$totallabels]>"
 			incr totallabels
 		}
 	}
 	puts $hK ""
-	puts $hK {// Same magic for 2-6, F7}
-	puts $hK {<Hotkey ScrollLockOn 2-6,F7>}
+	puts $hK {// Same magic for 2-6}
+	puts $hK {<Hotkey ScrollLockOn 2-6>}
 	puts $hK $winlabels
 	puts $hK "\t<Key %Trigger%>"
 	set totallabels 0
@@ -1166,7 +1173,7 @@ puts $hK {//-------------------------------------------------------------
 	  	set acct_winname($account) ${acctnick}
 	  	puts $hK "\t<if MouseIsOverWindow ${toonname}_${mycomp}${acctnick}>"
 		puts $hK $winlabels
-		puts $hK "\t<Key ctrl f[expr 8+$totallabels]>"
+		puts $hK "\t<Key ctrl f[expr 3+$totallabels]>"
 			incr totallabels
 		}
 	}
@@ -1210,7 +1217,7 @@ puts $hK {//-------------------------------------------------------------
 	  			set acct_winname($account) ${acctnick}
 	  			puts $hK "\t<if MouseIsOverWindow ${toonname}_${mycomp}${acctnick}>"
 				puts $hK $meleewinlabs
-				puts $hK "\t<Key shift f[expr 8+$totallabels]>"
+				puts $hK "\t<Key shift f[expr 3+$totallabels]>"
 				incr totallabels
 			}
 		}
@@ -1252,8 +1259,8 @@ puts $hK {//-------------------------------------------------------------
 	  		set acct_winname($account) ${acctnick}
 	  		puts $hK "\t<if MouseIsOverWindow ${toonname}_${mycomp}${acctnick}>"
 			puts $hK $winlabels
-			puts $hK "\t<Key shift f[expr 8+$totallabels]>"
-			puts $hK "\t<Key ctrl f[expr 8+$totallabels]>"
+			puts $hK "\t<Key shift f[expr 3+$totallabels]>"
+			puts $hK "\t<Key ctrl f[expr 3+$totallabels]>"
 			puts $hK "\t<endif>"
 			incr totallabels
 		}
@@ -1289,7 +1296,7 @@ puts $hK {//-------------------------------------------------------------
 	  	set acct_winname($account) ${acctnick}
 	  	puts $hK "\t<if MouseIsOverWindow ${toonname}_${mycomp}${acctnick}>"
 		puts $hK $winlabels
-		puts $hK "\t<Key ctrl f[expr 8+$totallabels]>"
+		puts $hK "\t<Key ctrl f[expr 3+$totallabels]>"
 	        puts $hK {	<Key f>}
 			incr totallabels
 		}
@@ -1324,7 +1331,7 @@ puts $hK {//-------------------------------------------------------------
 	  	set acct_winname($account) ${acctnick}
 	  	puts $hK "\t<if MouseIsOverWindow ${toonname}_${mycomp}${acctnick}>"
 		puts $hK $winlabels
-		puts $hK "\t<Key ctrl f[expr 8+$totallabels]>"
+		puts $hK "\t<Key ctrl f[expr 3+$totallabels]>"
 			incr totallabels
 		}
 	}
@@ -1357,7 +1364,7 @@ puts $hK {//-------------------------------------------------------------
 	  	set acct_winname($account) ${acctnick}
 	  	puts $hK "\t<if MouseIsOverWindow ${toonname}_${mycomp}${acctnick}>"
 		puts $hK $winlabels
-		puts $hK "\t<Key ctrl f[expr 8+$totallabels]>"
+		puts $hK "\t<Key ctrl f[expr 3+$totallabels]>"
 			incr totallabels
 		}
 	}
@@ -1460,7 +1467,7 @@ puts $hK {//-------------------------------------------------------------
 	  	set acct_winname($account) ${acctnick}
 	  	puts $hK "\t<if MouseIsOverWindow ${toonname}_${mycomp}${acctnick}>"
 		puts $hK $winlabels
-		puts $hK "\t<Key ctrl f[expr 8+$totallabels]>"
+		puts $hK "\t<Key ctrl f[expr 3+$totallabels]>"
 			incr totallabels
 		}
 	}
@@ -1544,8 +1551,9 @@ if { ! $nosmoverwrite } {
 	    for { set i 0 } { $i<[array size toons] } { incr i } {
 	      if { ! $found_tank && [string tolower [lindex $toons($i) 4]] == "tank" } {
 	        set name [string totitle [ string tolower [lindex $toons($i) 3]]]
+		regexp {^([^-]*)(?:-|$)} $name match basename
 		set found_tank true
-	        puts $sMN \"$name\"
+	        puts $sMN \"$basename\"
 	      }
 	    }
 	    if { ! $found_tank } { puts $sMN \"\" }
@@ -1561,11 +1569,12 @@ if { ! $nosmoverwrite } {
 	    for { set i 0 } { $i<[array size toons] } { incr i } {
 	      if { [ string tolower [lindex $toons($i) 4]] == "healer" } {
 	        set name [string totitle [ string tolower [lindex $toons($i) 3]]]
+		regexp {^([^-]*)(?:-|$)} $name match basename
 	        if { $first=="false" } { 
-	          puts -nonewline $sMN \"$name\"
+	          puts -nonewline $sMN \"$basename\"
 	          set first true
 	        } else {
-	          puts -nonewline $sMN ,\"$name\"
+	          puts -nonewline $sMN ,\"$basename\"
 	        } 
 	      }
 	    }
@@ -1573,6 +1582,22 @@ if { ! $nosmoverwrite } {
 	  } elseif { [regexp "^FSMB_toonlist" $line ] } {
 	    set toonno 1
 	    puts -nonewline $sMN "FSMB_toonlist=\{"
+	    set first false
+	    for { set i 0 } { $i<[array size toons] } { incr i } {
+	      set name [string totitle [ string tolower [lindex $toons($i) 3]]]
+	      regexp {^([^-]*)(?:-|$)} $name match basename
+	      if { $first=="false" } { 
+	        puts -nonewline $sMN \[$toonno\]=\"$basename\"
+	        set first true
+	      } else {
+	        puts -nonewline $sMN ,\[$toonno\]=\"$basename\"
+	      } 
+	      incr toonno
+	    }
+	    puts $sMN "\}"
+	  } elseif { [regexp "^FSMB_invitelist" $line ] } {
+	    set toonno 1
+	    puts -nonewline $sMN "FSMB_invitelist=\{"
 	    set first false
 	    for { set i 0 } { $i<[array size toons] } { incr i } {
 	      set name [string totitle [ string tolower [lindex $toons($i) 3]]]

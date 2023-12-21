@@ -1,11 +1,11 @@
 FSMB_version="111419_retail"
 AceComm=LibStub("AceComm-3.0")
-print('Hello from 5mmb!')
-FSMB_toonlist={[1]="Eversmile",[2]="Neversmile",[3]="Aslf",[4]="Frawshawwk",[5]="Goodlivin"}
-FSMB_invitelist={[1]="Thelnsane",[2]="Elonlnside",[3]="Tolnfinity",[4]="Thelraq",[5]="Anlmpulse"}
-FSMB_tank="Eversmile"
+print('Hello from 5mmb version '..FSMB_version.."!")
+FSMB_toonlist={[1]="Thelnsane",[2]="Elonlnside",[3]="Tolnfinity",[4]="Thelraq",[5]="Anlmpulse",[6]="Eversmile",[7]="Neversmile",[8]="Aslf",[9]="Frawshawwk",[10]="Goodlivin"}
+FSMB_invitelist={[1]="Thelnsane-bladefist",[2]="Elonlnside-bladefist",[3]="Tolnfinity-bladefist",[4]="Thelraq-bladefist",[5]="Anlmpulse-bladefist",[6]="Eversmile-bladefist",[7]="Neversmile-bladefist",[8]="Aslf-bladefist",[9]="Frawshawwk-bladefist",[10]="Goodlivin-bladefist"}
+FSMB_tank="Thelnsane"
 FSMB_nomacros=nil
-FSMB_healerlist={"Aslf"}
+FSMB_healerlist={"Anlmpulse","Aslf"}
 FSMB_maxheal={Druid=3,Priest=3,Shaman=5,Paladin=3}
 FSMB_mypoly={["Priest"]="Shackle",["Mage"]="Polymorph",["Druid"]="Hibernate",["Warlock"]="Banish"}
 FSMB_myint={["Paladin"]="Hammer of Justice",["Priest"]="Silence",["Mage"]="Counterspell",["Druid"]="Bash",["Shaman"]="Earth Shock",["Hunter"]="Scatter Shot",["Warlock"]="",["Warrior"]="Pummel",["Rogue"]="Kick",}
@@ -249,8 +249,8 @@ function init()
 	elseif myClass=="ROGUE" then
 		FSMB_IsMelee=true
 		if myspec==3 then myspec="SUBTLETY"
-		elseif myspec==2 then myspec="OUTLAW"
-		else myspec="ASSASINATION" end
+		elseif myspec==1 then myspec="ASSASINATION"
+		else myspec="OUTLAW" end
 	elseif myClass=="MONK" then
 		FSMB_IsMelee=true
 		if myspec==3 then myspec="WINDWALKER"
@@ -261,9 +261,9 @@ function init()
 		if myspec==2 then myspec="VENGEANCE"
 		else myspec="HAVOC" end
 	elseif myClass=="WARLOCK" then
-		if myspec==3 then myspec="DESTRUCTION"
+		if myspec==1 then myspec="AFFLICTION"
 		elseif myspec==2 then myspec="DEMONOLOGY"
-		else myspec="AFFLICTION" end
+		else myspec="DESTRUCTION" end
 	elseif myClass=="PALADIN" then
 		if myspec==1 then myspec="HOLYPAL" FSMB_IsMelee=true
 		elseif myspec==2 then myspec="PROTPAL"
@@ -287,10 +287,25 @@ clearmacros()
 	PickupMacro(macroId)
 	PlaceAction(118)
 	ClearCursor()
-	local slot=43
+	local macroId = CreateMacroFS("delete_trash", "Ability_HUNTER_pathfinding", "/run AutoDelete()" , personal);
+	PickupMacro(macroId)
+	PlaceAction(11)
+	PickupMacro(macroId)
+	PlaceAction(23)
+	PickupMacro(macroId)
+	PlaceAction(83)
+	PickupMacro(macroId)
+	PlaceAction(95)
+	PickupMacro(macroId)
+	PlaceAction(107)
+	PickupMacro(macroId)
+	PlaceAction(119)
+	ClearCursor()
+	local slot=38
 	local idx=0
 	local i
 	for i=1,TableLength(FSMB_toonlist) do
+		if i > 10 then break end
 		if myname==FSMB_toonlist[i] then
 			macroId = CreateMacro("f"..i.."_fs", "Ability_hunter_pet_gorilla", "", nil);
 		else
@@ -304,13 +319,13 @@ clearmacros()
 
 		macroId = CreateMacroFS("init_fs", "Ability_HUNTER_pathfinding", "/init" , hunterpersonal);
 	PickupMacro(macroId)
-	PlaceAction(43)
+	PlaceAction(25)
 	ClearCursor()
-	local slot=32
+	local slot=27
 	local idx=0
 	local i
 		for i=1,TableLength(FSMB_toonlist) do
-			if i==6 then slot=44 idx=0 end
+			--if i==6 then slot=44 idx=0 end
 			if i>10 then break end
 			if myname==FSMB_toonlist[i] then
 				macroId = CreateMacroFS("a"..i.."_fs", "Ability_HUNTER_pet_hyena", "/console autoInteract 0", nil);
@@ -327,7 +342,7 @@ clearmacros()
 		local idx=0
 		local i
 		for i=1,TableLength(FSMB_toonlist) do
-			if i==11 then break end
+			if i>10 then break end
 			if myClass=="SHAMAN" and myspec=="RESTOSHAM" then
 				if FSMB_toonlist[i]==myname then
 					heallist="\n/castsequence [@player] reset=combat/30 "..riptide..","..healingSurge..","..healingSurge..","..healingSurge..","..healingSurge..","..healingSurge
@@ -382,15 +397,15 @@ clearmacros()
 	end
 	index=CreateMacroFS("reload_fs","spell_frost_stun","/reload",personal)
 	PickupMacro(index)
-	PlaceAction(31)
+	PlaceAction(38)
 	ClearCursor()
 	index=CreateMacroFS("leave_fs","spell_nature_purge","/script C_PartyInfo.LeaveParty()",personal)
 	PickupMacro(index)
-	PlaceAction(30)
+	PlaceAction(26)
 	ClearCursor()
 	index=CreateMacroFS("dance_fs","ability_DRUID_aquaticform","/dance",nil)
 	PickupMacro(index)
-	PlaceAction(29)
+	PlaceAction(37)
 	ClearCursor()
 	-- NONE OF THE FOLLOWING MACROS GET CREATED IF YOU put nomacros in your toonlist
 	if not FSMB_nomacros then
@@ -410,7 +425,7 @@ clearmacros()
 			PlaceAction(61)
 			index=CreateMacroFS("feed_fs","INV_Misc_QuestionMark","/cast [pet] "..feedPet.."\n/use 0 1\n/run ClearCursor()\n/cast [nopet] "..callPet.."\n/cast [@pet,dead] "..revivePet.."",nil)
 			PickupMacro(index)
-			PlaceAction(38)
+			PlaceAction(24)
 			ClearCursor()
 		end
 		if myClass=="WARRIOR" and IsTank(myname) then
@@ -445,10 +460,10 @@ clearmacros()
 			PickupMacro(macroId)
 			PlaceAction(62)
 			ClearCursor()
-				local slot=38
-				macroId = CreateMacroFS("b1_fs", "INV_Misc_QuestionMark", "/cast [@player] "..pwFortitude.."", nil);
-				PickupMacro(macroId)
-				PlaceAction(slot)
+			local slot=72
+			macroId = CreateMacroFS("b1_fs", "INV_Misc_QuestionMark", "/cast [@player] "..pwFortitude.."", nil);
+			PickupMacro(macroId)
+			PlaceAction(slot)
 			macroId = CreateMacroFS("bufft_fs", "INV_Misc_QuestionMark", "/castsequence reset=combat/target "..pwFortitude..",null", personal);
 		end
 		if myClass=="PALADIN" or myClass=="SHAMAN" or myClass=="DRUID" or myClass =="MONK" or myClass =="PRIEST" or myClass=="DEATHKNIGHT" then
@@ -529,11 +544,11 @@ clearmacros()
 				ClearCursor()
 			end
 				GrabSpell(prismaticBarrier)
-				PlaceAction(37)
+				PlaceAction(71)
 				ClearCursor()
 				macroId = CreateMacroFS("b1_fs", "INV_Misc_QuestionMark", "/cast [@player] "..arcaneIntellect.."", nil);
 				PickupMacro(macroId)
-				PlaceAction(38)
+				PlaceAction(72)
 				ClearCursor()
 			macroId = CreateMacroFS("bufft_fs", "INV_Misc_QuestionMark", "/castsequence reset=combat/target "..arcaneIntellect.."", personal);
 			PickupAction(12)
@@ -551,7 +566,7 @@ clearmacros()
 			ClearCursor()
 		end
 		local index
-		index=CreateMacroFS("setup_fs_"..myspec,"Spell_magic_polymorphchicken","#showtooltip\n/click [button:1] setup_fs_"..myspec.." LeftButton t;\n/petpassive [mod:alt]\n/stopcasting [mod:alt]",nil)
+		index=CreateMacroFS("SETUP_FS_"..myspec,"Spell_magic_polymorphchicken","#showtooltip\n/click [button:1] SETUP_FS_"..myspec.." LeftButton t;\n/petpassive [mod:alt]\n/stopcasting [mod:alt]",nil)
 		PickupMacro(index)
 		PlaceAction(1)
 		if myClass=="DRUID" then
@@ -567,7 +582,7 @@ clearmacros()
 			PlaceAction(109)
 		end
 		ClearCursor()
-		index=CreateMacroFS("single_fs_"..myspec,"ability_searingarrow","#showtooltip\n/click [button:1] single_fs_"..myspec.." LeftButton t;",nil)
+		index=CreateMacroFS("SINGLE_FS_"..myspec,"ability_searingarrow","#showtooltip\n/click [button:1] SINGLE_FS_"..myspec.." LeftButton t;",nil)
 		PickupMacro(index)
 		PlaceAction(2)
 		if myClass=="DRUID" then
@@ -594,7 +609,7 @@ clearmacros()
 			--PickupMacro(index)
 			--PlaceAction(67)
 			--ClearCursor()
-			index=CreateMacroFS("multi_fs_"..myspec,"ability_upgrademoonglaive","#showtooltip\n/click [button:1] multi_fs_"..myspec.." LeftButton t;",nil)
+			index=CreateMacroFS("MULTI_FS_"..myspec,"ability_upgrademoonglaive","#showtooltip\n/click [button:1] MULTI_FS_"..myspec.." LeftButton t;",nil)
 		PickupMacro(index)
 		PlaceAction(3)
 		if myClass=="DRUID" then
@@ -608,7 +623,7 @@ clearmacros()
 			PlaceAction(111)
 		end
 		ClearCursor()
-		index=CreateMacroFS("turbo_fs_"..myspec,"Spell_nature_lightning","#showtooltip\n/click [button:1] turbo_fs_"..myspec.." LeftButton t;\n/petpassive [mod:alt]\n/run SetView(4)",hunterpersonal)
+		index=CreateMacroFS("TURBO_FS_"..myspec,"Spell_nature_lightning","#showtooltip\n/click [button:1] TURBO_FS_"..myspec.." LeftButton t;\n/petpassive [mod:alt]\n/run SetView(4)",hunterpersonal)
 		PickupMacro(index)
 		PlaceAction(4)
 		if myClass=="DRUID" then
@@ -624,7 +639,7 @@ clearmacros()
 			PlaceAction(112)
 		end
 		ClearCursor()
-		index=CreateMacroFS("aoe_fs_"..myspec,"spell_fire_selfdestruct","#showtooltip\n/click [button:1] aoe_fs_"..myspec.." LeftButton t;",nil)
+		index=CreateMacroFS("AOE_FS_"..myspec,"spell_fire_selfdestruct","#showtooltip\n/click [button:1] AOE_FS_"..myspec.." LeftButton t;",nil)
 		PickupMacro(index)
 		PlaceAction(5)
 		if myClass=="DRUID" then
@@ -640,7 +655,7 @@ clearmacros()
 			PlaceAction(113)
 		end
 		ClearCursor()
-		index=CreateMacroFS("sheal_fs_"..myspec,"spell_nature_healingtouch","#showtooltip\n/click [button:1] sheal_fs_"..myspec.." LeftButton t;",nil)
+		index=CreateMacroFS("SHEAL_FS_"..myspec,"spell_nature_healingtouch","#showtooltip\n/click [button:1] SHEAL_FS_"..myspec.." LeftButton t;",nil)
 		PickupMacro(index)
 		PlaceAction(6)
 		if myClass=="DRUID" then
@@ -672,10 +687,10 @@ clearmacros()
 		--PlaceAction(56)
 		--ClearCursor()
 	end
-local macroId = CreateMacro("spit_fs", "Inv_misc_slime_01", "/spit", nil);
-PickupMacro(macroId)
-PlaceAction(59)
-ClearCursor()
+--local macroId = CreateMacro("spit_fs", "Inv_misc_slime_01", "/spit", nil);
+--PickupMacro(macroId)
+--PlaceAction(59)
+--ClearCursor()
 local partymac=""
 for i=1,TableLength(FSMB_toonlist) do
 	partymac=partymac.."/invite "..FSMB_toonlist[i].."\n"
@@ -774,12 +789,12 @@ end
 	SetCVar("ShowClassColorInFriendlyNameplate", true)
 	SetCVar("showTargetOfTarget", true)
 	SetModifiedClick("SELFCAST","NONE")
-	SetActionBarToggles(true,true,true,true,true)
-	SHOW_MULTI_ACTIONBAR_1=true
-	SHOW_MULTI_ACTIONBAR_2=true
-	SHOW_MULTI_ACTIONBAR_3=true
-	SHOW_MULTI_ACTIONBAR_4=true
-	ALWAYS_SHOW_MULTI_ACTIONBAR=1
+	--SetActionBarToggles(true,true,true,true,true)
+	--SHOW_MULTI_ACTIONBAR_1=true
+	--SHOW_MULTI_ACTIONBAR_2=true
+	--SHOW_MULTI_ACTIONBAR_3=true
+	--SHOW_MULTI_ACTIONBAR_4=true
+	--ALWAYS_SHOW_MULTI_ACTIONBAR=1
 	MultiActionBar_Update()
 	ClearTutorials()
 	ReloadUI()
@@ -841,10 +856,10 @@ function DeleteMacroFS(indexorname)
 end
 function clearmacros()
   print("Clearing Macros...")
- MB_macronamestodelete={ "init_fs","focus_fs","sdm_fs","aux1_fs","aux2_fs","aux3_fs","follow_fs","rsingle","rmulti","rebirth","hearth","pet","spit","bufft","self","healpot","manapot","tot","rez","setup","pull","feign","shackle","feed","single","multi","selfh","decurse","reload","dance","leave","makealine","drink","buff","healtank","aoe","turbo","int","passive","poly","h1","h2","h3","h4","h5","f1","f2","f3","f4","f5","a1","a2","a3","a4","a5","party","b0","b1","b2","b3","b4","b5","rsingle_fs","rmulti_fs","rebirth_fs","hearth_fs","pet_fs","spit_fs","bufft_fs","self_fs","healpot_fs","manapot_fs","tot_fs","rez_fs","FARM_fs","setup_fs","pull_fs","feign_fs","shackle_fs","feed_fs","single_fs","multi_fs","selfh_fs","decurse_fs","reload_fs","dance_fs","leave_fs","makealine_fs","drink_fs","buff_fs","healtank_fs","sheal_fs","aoe_fs","turbo_fs","int_fs","passive_fs","poly_fs","h1_fs","h2_fs","h3_fs","h4_fs","h5_fs","f1_fs","f2_fs","f3_fs","f4_fs","f5_fs","a1_fs","a2_fs","a3_fs","a4_fs","a5_fs","a6_fs","a7_fs","a8_fs","a9_fs","a10_fs","party_fs","b0_fs","b1_fs","b2_fs","b3_fs","b4_fs","b5_fs","h6_fs","h7_fs","h8_fs","h9_fs","h10_fs"}
+ MB_macronamestodelete={ "init_fs","focus_fs","sdm_fs","aux1_fs","aux2_fs","aux3_fs","follow_fs","rsingle","rmulti","rebirth","hearth","pet","spit","bufft","self","healpot","manapot","tot","rez","setup","pull","feign","shackle","feed","single","multi","selfh","decurse","reload","dance","leave","makealine","drink","buff","healtank","aoe","turbo","int","passive","poly","h1","h2","h3","h4","h5","f1","f2","f3","f4","f5","a1","a2","a3","a4","a5","party","b0","b1","b2","b3","b4","b5","rSINGLE_FS","rmulti_fs","rebirth_fs","hearth_fs","pet_fs","spit_fs","bufft_fs","self_fs","healpot_fs","manapot_fs","tot_fs","rez_fs","FARM_fs","setup_fs","pull_fs","feign_fs","shackle_fs","feed_fs","SINGLE_FS","multi_fs","selfh_fs","decurse_fs","reload_fs","dance_fs","leave_fs","makealine_fs","drink_fs","buff_fs","healtank_fs","sheal_fs","aoe_fs","turbo_fs","int_fs","passive_fs","poly_fs","h1_fs","h2_fs","h3_fs","h4_fs","h5_fs","f1_fs","f2_fs","f3_fs","f4_fs","f5_fs","a1_fs","a2_fs","a3_fs","a4_fs","a5_fs","a6_fs","a7_fs","a8_fs","a9_fs","a10_fs","party_fs","b0_fs","b1_fs","b2_fs","b3_fs","b4_fs","b5_fs","h6_fs","h7_fs","h8_fs","h9_fs","h10_fs","f6_fs","f7_fs","f8_fs","f9_fs","f10_fs","f11_fs","f12_fs","f13_fs","f14_fs","f15_fs","f16_fs","f17_fs","f18_fs","f19_fs","f20_fs","a6_fs","a7_fs","a8_fs","a9_fs","a10_fs"}
  
 MB_allspecs = {"PROTECTION","ARMS","FURY","UNHOLY","FROSTDK","BLOOD","RESTORATION","GUARDIAN","FERAL","BALANCE","ARCANE","FIRE","FROST","RESTOSHAM","ENHANCEMENT","ELEMENTAL","SURVIVAL","MARKSMANSHIP","BEASTMASTERY","SHADOW","HOLY","DISCIPLINE","SUBTLETY","OUTLAW","ASSASINATION","WINDWALKER","MISTWEAVER","BREWMASTER","VENGEANCE","HAVOC","DESTRUCTION","DEMONOLOGY","AFFLICTION","HOLYPAL","PROTPAL", "RETRIBUTION" }
-MB_allmactypes = {"single_fs_","setup_fs_","multi_fs_","turbo_fs_","aoe_fs_","sheal_fs_"}
+MB_allmactypes = {"SETUP_FS","MULTI_FS_","TURBO_FS_","AOE_FS_","SHEAL_FS_","SINGLE_FS_","single_fs_","setup_fs_","multi_fs_","turbo_fs_","aoe_fs_","sheal_fs_"}
 
 
   for _,macname in pairs(MB_macronamestodelete) do
@@ -1514,15 +1529,9 @@ end
 function PartyUp()
 	local partymac=""
 	FSMB_raidleader=myname
-	if FSMB_game=="shadow" then 
 		for i=1,TableLength(FSMB_invitelist) do
 			DEFAULT_CHAT_FRAME.editBox:SetText("/invite "..FSMB_invitelist[i]) ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
 		end
-	else
-		for i=1,TableLength(FSMB_toonlist) do
-			DEFAULT_CHAT_FRAME.editBox:SetText("/invite "..FSMB_toonlist[i]) ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
-		end
-	end
 	SetLootMethod("freeforall",UnitName("player"))
 end
 
@@ -1533,3 +1542,67 @@ end
 	--.summon boringlowbee
 	--.mod level 80
 --end
+function AutoDelete()
+	--Delete certain items when beyond a certain number of stacks
+	--have to pick food type based on hunter name and pet
+	--It only works by STACKS. 1 means you allow 1 stack. 2 means 2 stacks.
+	--That could be 1.5 stacks also. Partial stacks count as a stack.
+	local amount=0
+	MB_TheList={ ["Large Flat Tooth"]=0,
+	["Pretty Pebble"]=0,
+	["Strange Pebble"]=0,
+	["Mysterious Rock"]=0,
+	["Torn Bear Pelt"]=0,
+	["Frayed Cloak"]=0,
+	["Ogre Effigy"]=0,
+	["Waterlogged Supplies"]=0,
+	["Cracked Bill"]=0,
+	["Ruffled Feather"]=0,
+	["Broken Antler"]=0,
+	["Chipped Boar Tusk"]=0,
+	["Large Boar Tusk"]=0,
+	["Fractured Canine"]=0,
+	["Ruined Pelt"]=0,
+	["Sharp Canine"]=0,
+	["Overseer's Mandate"]=0,
+	["Empty Wallet"]=0,
+	["Broken Mirror"]=0,
+	["Shiny Seashell"]=0,
+	["Tough Jerky"]=0,
+	["Large Bear Tooth"]=0,
+	["Handful of Blood Shards"]=0,
+	["Shiny Pebble"]=0}
+	local CrapIGot={}
+	for bag=0,4 do for slot=1,C_Container.GetContainerNumSlots(bag) do
+	        local itemTable  = C_Container.GetContainerItemInfo(bag,slot)
+		--if itemTable then printt(itemTable) end
+		-- C_Container.GetContainerItemInfo now returns a table with the following keys
+		-- Keys: itemName hasLoot hyperlink iconFileID hasNoValue isLocked itemID isBound stackCount isFiltered isReadable quality
+		if itemTable then
+		        local itemName, _, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon = GetItemInfo(itemTable.hyperlink)
+			for key,limit in pairs(MB_TheList) do
+				if string.find(itemName,key) then
+					if limit==0 then
+						C_Container.PickupContainerItem(bag,slot)
+						DeleteCursorItem()
+						--Accept()
+						ClearCursor()
+						break
+					elseif not FindInTable(CrapIGot,key) then
+						table.insert(CrapIGot,key)
+						CrapIGot[key]=1
+					elseif CrapIGot[key]==limit then
+						C_Container.PickupContainerItem(bag,slot)
+						DeleteCursorItem()
+						--Accept()
+						ClearCursor()
+						break
+					else
+						CrapIGot[key]=CrapIGot[key]+1
+					end
+				end
+			end
+		end
+	end end
+end
+

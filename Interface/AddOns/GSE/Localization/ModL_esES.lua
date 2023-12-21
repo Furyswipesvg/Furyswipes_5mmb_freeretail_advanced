@@ -98,6 +98,10 @@ L["All macros are now stored as upper case names.  You may need to re-add your o
 --[[Translation missing --]]
 L["Alt Keys."] = "Alt Keys."
 --[[Translation missing --]]
+L["Alwaus use the highest rank of spell available.  This is useful for levelling."] = "Alwaus use the highest rank of spell available.  This is useful for levelling."
+--[[Translation missing --]]
+L["Always use Max Rank"] = "Always use Max Rank"
+--[[Translation missing --]]
 L["Any Alt Key"] = "Any Alt Key"
 --[[Translation missing --]]
 L["Any Control Key"] = "Any Control Key"

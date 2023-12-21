@@ -111,6 +111,10 @@ L["Addin Version %s contained versions for the following macros:"] = "Addin Vers
 --[[Translation missing --]]
 L["All macros are now stored as upper case names.  You may need to re-add your old macros to your action bars."] = "All macros are now stored as upper case names.  You may need to re-add your old macros to your action bars."
 L["Alt Keys."] = "Tasto ALT"
+--[[Translation missing --]]
+L["Alwaus use the highest rank of spell available.  This is useful for levelling."] = "Alwaus use the highest rank of spell available.  This is useful for levelling."
+--[[Translation missing --]]
+L["Always use Max Rank"] = "Always use Max Rank"
 L["Any Alt Key"] = "Qualsiasi tasto ALT"
 L["Any Control Key"] = "Qualsiasi tasto Control"
 L["Any Shift Key"] = "Qualsiasi tasto Shift"
