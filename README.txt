@@ -14,12 +14,20 @@ Read_Toonlist.bat to run with.
 5) Double click Hotkeynet.exe
 6) Click Load Script button--Load 5mmb_HKN_retail.txt
 7) scroll lock on
-8) ctrl-alt-m to login
-10) ctrl-i to initialize all your wow buttons
-11) Hit 0 key in your main window to invite/switch to free-for-all loot
-12) Interface Options--turn  the annoying middle action bar off
-13) alt-4 to make everyone follow/assist your main
-14) Set up your dps macros in GSE. (/gse)
+========FAST LOGIN=========
+8) ctrl-alt-m to to open wow windows
+9) ctrl-alt-k to rename
+10) shift ctrl m to position (also works during play whenever you move windows
+11) ctrl-alt-j to login to wow
+12) ctrl-e to enter world (sends enter key to all windows, also works in game)
+=========SLOW LOGIN=========
+13) alternate start: ctrl-alt-n (login windows one at a time)
+14) ctrl-i to initialize all your wow buttons
+15) Hit 0 key in your main window to invite/switch to free-for-all loot
+16) Interface Options--turn  the annoying middle action bar off
+17) alt-4 to make everyone follow/assist your main
+19) /gse -> options -> plugins -> Furyswipes_5mmb button  <- loads premade macros for all classes (no DH or DK yet)
+20) Set up your dps macros in GSE. (/gse)
 
 Retail controls are a bit similar to classic--Full classic controls here:
 https://www.reddit.com/r/Classic_Multiboxing/wiki/5mmbcontrols
@@ -34,6 +42,4 @@ As you craft your gse macros you might want to pull them all together.
 After you have the loaded.lua file you can copy into
 Interface/Addons/Furyswipes_5mmb and all accounts will have access to them.
 
-Warning, it only saves the first one of a given name. So, doing this will
-probably overwrite the one you wanted to save. Haven't solved that yet. Maybe
-I'll just save the biggest one I find.
+Warning, it only saves the longest one of a given name. 

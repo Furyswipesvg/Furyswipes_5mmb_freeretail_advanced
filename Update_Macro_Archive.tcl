@@ -1,4 +1,3 @@
-set macros ""
 proc get_macspec { name } {
 array unset specs
 set specs("Global")  0
@@ -109,13 +108,14 @@ set match ""
 set sname ""
 regexp {.*_.*_(\w+)} $name match sname
 if { [info exists sname] && [info exists class("$sname") ] && [info exists specs("$sname")] } {
-  puts "$class("$sname") $specs("$sname")"
+  #puts "$class("$sname") $specs("$sname")"
   return "$class("$sname") $specs("$sname")"
 } else {
   return "UNKNOWN"
 }
 }
 set names ""
+set macros ""
 set all_macros true
 foreach fl [glob WTF/Account/*/SavedVariables/GSE.lua] {
 set fL [open $fl r]
@@ -129,12 +129,33 @@ while { [gets $fL line] >= 0 } {
 	}
 	if {$found_macros} { 
 		if { [regexp {^\s*\[\".*_.*_} $line] } {
+			set length [string length $line]
+			set existing_length 0
 	                regexp {\["(\S+)\"\]} $line match macname
 			if { [regexp {[a-z]} $macname] } { continue }
-			set macname [string toupper $macname]
-			if { $all_macros || [lsearch $names $macname] == -1 } { 
-			  lappend macros $line
-			  lappend names $macname
+			#if { $macname == "AOE_FS_FURY" } { puts "Found $macname." }
+			set index [lsearch -index 0 $names $macname]
+			if { $index != -1 } { 
+			  set existing_length [lindex [lindex $names $index] 1] 			
+		        }
+			if { $all_macros || ($length > $existing_length) } { 
+			  if { !$all_macros && ($index != -1) } { 
+			    # Remove name/length of repeat macro
+			    set names [lreplace $names $index $index]
+			    set newmacs ""
+			    #Remove all previous macros of same name
+			    foreach mac $macros {
+				    if {![regexp $macname $mac] } {
+					    lappend newmacs $mac
+				    }
+			    }
+			    set macros $newmacs
+		          }
+			  # Never add an identical macro
+			  if { [lsearch -exact $macros $line] == -1 } {
+			    lappend macros $line
+			    lappend names "$macname $length"
+		          }
 		        }
 		}
 	}

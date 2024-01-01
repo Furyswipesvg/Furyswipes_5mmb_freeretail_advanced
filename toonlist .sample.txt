@@ -6,18 +6,17 @@
 # Then subscription name
 # Then toon name.
 # Then role: tank / melee / healer / caster / hunter
-# You may add letters at the end 
-# to launch certain boxes when you hit ctrl-alt-<letter>
-# The letters are like their raid identifier. Example--The f
-# at the end of furyswipes line means ctrl-alt-f only opens him
-# Each toon can be in many different raids. 
-# ALL BOXES ARE IN RAID m by default. This cannot be changed!
-# ctrl alt m launches all your guys.
-# NO ALT (special) CHARACTERS ALLOWED IN TOON NAMES!!! ONLY A-Z
-# add the servername after  the toon name if they will be on different
-# servers from each other using a dash (see example below)
+# FAST OPEN SUPPORT--3 step process:
+# 1) ctrl alt m (open wow windows)
+# 2) ctrl alt k (rename)
+# 3) shift ctrl m (position them all)
+# 4) ctrl alt j (fill in login and enter wow
+# 5) ctrl-e enter world (hits enter in each window)
+# OR
+# 1) ctrl-alt-n (log in each window fully one at a time0
 
-box wowaccount@gmail.net PaSsWoRd wow1 cheat-bladefist tank f
+
+box wowaccount@gmail.net PaSsWoRd wow1 cheat-bladefist tank 
 box wowaccount@gmail.net PaSsWoRd wow2 btfo-nathrezim caster
 box wowaccount@gmail.net PaSsWoRd wow3 married healer
 box wowaccount@gmail.net PaSsWoRd wow4 psh caster

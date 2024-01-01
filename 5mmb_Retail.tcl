@@ -1,4 +1,4 @@
-set version 121923_retail
+set version 122823_retail
 lappend auto_path twapi
 package require twapi_input
 set kb [string tolower [twapi::get_keyboard_layout_name]]
@@ -307,11 +307,11 @@ if { ! $nohotkeyoverwrite } {
 	set hK [open $HKN w+]
 	puts $hK "// Version $version"
 	puts $hK {// Comments begin with //. They don't do anything in the script.
-<SetActiveWindowTrackingDelay 175>
-<SetActiveWindowTracking on>
 
-// These are window labels. Kind of like nicknames for long window names.
-}
+// These are window labels. Kind of like nicknames for long window names.}
+#<SetActiveWindowTrackingDelay 175>
+#<SetActiveWindowTracking on>
+
 	set totallabels 0
 	for { set i 0 } { $i<[array size toons] } { incr i } {
 	  set toonname [string tolower [lindex $toons($i) 3]]
@@ -338,24 +338,27 @@ if { ! $nohotkeyoverwrite } {
 	}
 	puts $hK ""
 	puts $hK {// The above labels are your window names.
-// Short names are easier to work with.
+// They are like the "address" to your windows. They contain which 
+// computer to send the hotkey to, if you are using multiple machines. (you can!)
 // So in this case, w0 will be used later to point to Mootalia's window.
 // Name your windows something that gives you a hint.
 // Toon name and a hint at the end about what wow license to click
 // It's not critical, but it's very helpful
-
 // This is the main launcher command definition.
-<Command LaunchAndRename>
+  <Command LaunchAndRename>
 	<SendPC %1%>}
 	set curdir [pwd]
 if { $fixunused=="" } { 
-	puts -nonewline $hK {   <Run "}
+	puts -nonewline $hK {	<Run "}
 	puts $hK "$curdir/Wow.exe\" >"
-	puts $hK {<TargetWin "World of Warcraft">  
+	puts $hK {	<TargetWin "World of Warcraft">  
 	<TargetWin "World of Warcraft">
 	<RenameTargetWin %2%>
-	<Wait 300>
-	<SetWinSize %5% %6%>
+	<Wait 300>}
+if { $hideframes=="true" } {
+	puts $hK "\t<RemoveWinFrame>"
+}
+puts $hK {	<SetWinSize %5% %6%>
 	<SetWinPos %7% %8%>
 	<SetForegroundWin>
 	<Text %3%>
@@ -372,6 +375,9 @@ if { $fixunused=="" } {
 	<RenameTargetWin Unused%2%>
 	<Wait 300>
 	<TargetWin %2%>
+if { $hideframes=="true" } {
+	puts $hK "\t<RemoveWinFrame>"
+}
 	<SetWinSize %5% %6%>
 	<SetWinPos %7% %8%>
 	<SetForegroundWin>
@@ -380,9 +386,6 @@ if { $fixunused=="" } {
 	<Text %4%>
 	<Key Enter>}
 	}
-if { $hideframes=="true" } {
-	puts $hK "\t<RemoveWinFrame>"
-}
 	puts $hK "\t<TargetWin %2%>"
 	puts $hK "\t<WaitForInputIdle 2000>"
 puts $hK {
@@ -391,7 +394,7 @@ puts $hK {
 // You know, max graphics, sound, etc.
 // NEXT STEP: If you want to do this, you have to make a SEPERATE WOW
 // DIR and put the path below. Set that wow up the way you want.
-<Command LaunchHiresAndRename>
+  <Command LaunchHiresAndRename>
 	<SendPC %1%>
 	<Run "G:/World of Warcraft2/_retail_/Wow.exe" >
 	<WaitForInputIdle 400>
@@ -414,7 +417,7 @@ puts $hK {
 	<SetVar LastWin ActiveWindowName>
 
 // This command is used to resize your window.	
-<Command ResetWindowPosition>
+  <Command ResetWindowPosition>
 	<SendPC %1%> 
 	<TargetWin %2%>
 	<SetForegroundWin>
@@ -469,10 +472,33 @@ if { $use2monitors } {
 	set raidhash(5) {{1920 1440 960 720 } {960 720 0 720} {960 720 960 0} {960 720 1920 0} {960 720 2880 720 }}
 	set raidhash(10) {{1280 1020 0 960} {1280 1020 1280 960} {1280 1020 2560 960} {640 480 640 0} {640 480 0 0} {640 480 0 480} {640 480 1280 0} {640 480 640 480} {640 480 1280 480} {640 480 1920 480}}
 	set raidhash(10) {{2240 1680 0 480} {640 480 0 0} {640 480 640 0} {640 480 1280 0} {640 480 1920 0} {640 480 2560 0} {640 480 3200 0} {640 480 2240 480} {640 480 2880 480} {1420 1065 2240 960}}
-	set raidhash(20) {{640 480 0 0} {960 720 0 1440} {960 720 960 1440} {960 720 1920 1440} {640 480 640 0} {640 480 1280 0} {640 480 1920 0} {640 480 2560 0} {640 480 3200 0} {640 480 0 480} {640 480 640 480} {640 480 1280 480} {640 480 1920 480} {640 480 2560 480} {640 480 3200 480} {640 480 0 960} {640 480 640 960} {640 480 1280 960} {640 480 1920 960 } {640 480 2560 960}} 
+	set raidhash(15) {{1980 1400 0 720} {930 698 1980 360} {480 360 0 0} {480 360 480 0} {480 360 960 0} {930 698 2910 360 } {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} } 
+	set raidhash(20) {{640 480 0 0} {960 720 0 1440} {960 720 960 1440} {960 720 1920 1440} {640 480 640 0} {640 480 1280 0} {640 480 1920 0} {640 480 2560 0} {640 480 3200 0} {640 480 0 480} {640 480 640 480} {640 480 1280 480} {640 480 1920 480} {640 480 2560 480} {640 480 3200 480} {640 480 0 960} {640 480 640 960} {640 480 1280 960} {640 480 1920 960 } {640 480 2560 960} {480 360 3200 1280}} 
+	set raidhash(20) {{1980 1400 0 720} {930 698 1980 720} {480 360 0 0} {480 360 480 0} {480 360 960 0} {930 698 1980 1418 } {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} {480 360 1920 360} {480 360 2400 360} {480 360 2880 360} {480 360 3360 360 } {930 698 2910 720} } 
 	set raidhash(25) {{533 430 1548 0} {1548 1290 0 860} {533 430 1548 430} {533 430 1548 860} {533 430 1548 1290} {533 430 1548 1720} {533 430 2081 0} {533 430 2081 430} {533 430 2081 860} {533 430 2081 1290} {533 430 2081 1720} {533 430 2614 0} {533 430 2614 430} {533 430 2614 860} {533 430 2614 1290} {533 430 2614 1720} {533 430 3147 0} {533 430 3147 430} {533 430 3147 860} {533 430 3147 1290} {533 430 3147 1720} {533 430 482 0} {533 430 1015 0} {533 430 482 430} {533 430 1015 430}}
 	set raidhash(40) {{480 360 0 0} {1440 1080 960 1080} {480 360 480 0} {480 360 960 0} {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} {480 360 1920 360} {480 360 2400 360} {480 360 2880 360} {480 360 3360 360} {480 360 0 720} {480 360 480 720} {480 360 960 720} {480 360 1440 720} {480 360 1920 720} {480 360 2400 720} {480 360 2880 720} {480 360 3360 720} {480 360 0 1080} {480 360 480 1080} {480 360 2400 1080} {480 360 2880 1080} {480 360 3360 1080} {480 360 0 1440} {480 360 480 1440} {480 360 2400 1440} {480 360 2880 1440} {480 360 3360 1440} {480 360 0 1800} {480 360 480 1800} {480 360 2400 1800} {480 360 2880 1800} {480 360 3360 1800}}
-	set raidhash(80) {{480 360 0 0} {1440 1080 960 1080} {480 360 480 0} {480 360 960 0} {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} {480 360 1920 360} {480 360 2400 360} {480 360 2880 360} {480 360 3360 360} {480 360 0 720} {480 360 480 720} {480 360 960 720} {480 360 1440 720} {480 360 1920 720} {480 360 2400 720} {480 360 2880 720} {480 360 3360 720} {480 360 0 1080} {480 360 480 1080} {480 360 2400 1080} {480 360 2880 1080} {480 360 3360 1080} {480 360 0 1440} {480 360 480 1440} {480 360 2400 1440} {480 360 2880 1440} {480 360 3360 1440} {480 360 0 1800} {480 360 480 1800} {480 360 2400 1800} {480 360 2880 1800} {480 360 3360 1800} {480 360 0 0} {1440 1080 960 1080} {480 360 480 0} {480 360 960 0} {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} {480 360 1920 360} {480 360 2400 360} {480 360 2880 360} {480 360 3360 360} {480 360 0 720} {480 360 480 720} {480 360 960 720} {480 360 1440 720} {480 360 1920 720} {480 360 2400 720} {480 360 2880 720} {480 360 3360 720} {480 360 0 1080} {480 360 480 1080} {480 360 2400 1080} {480 360 2880 1080} {480 360 3360 1080} {480 360 0 1440} {480 360 480 1440} {480 360 2400 1440} {480 360 2880 1440} {480 360 3360 1440} {480 360 0 1800} {480 360 480 1800} {480 360 2400 1800} {480 360 2880 1800} {480 360 3360 1800}}
+	set raidhash(40) {{1440 1080 960 1080} {480 360 0 0 } {480 360 480 0} {480 360 960 0} {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} {480 360 1920 360} {480 360 2400 360} {480 360 2880 360} {480 360 3360 360} {480 360 0 720} {480 360 480 720} {480 360 960 720} {480 360 1440 720} {480 360 1920 720} {480 360 2400 720} {480 360 2880 720} {480 360 3360 720} {480 360 0 1080} {480 360 480 1080} {480 360 2400 1080} {480 360 2880 1080} {480 360 3360 1080} {480 360 0 1440} {480 360 480 1440} {480 360 2400 1440} {480 360 2880 1440} {480 360 3360 1440} {480 360 0 1800} {480 360 480 1800} {480 360 2400 1800} {480 360 2880 1800} {480 360 3360 1800}}
+	set raidhash(55) { {1536 1152 768 864 }
+{384 288 0 0 } {384 288 384 0} {384 288 768 0} {384 288 1152 0} {384 288 1536 0} {384 288 1920 0} {384 288 2304 0} {384 288 2688 0} {384 288 3072 0} {384 288 3456 0} 
+{384 288 0 288} {384 288 384 288} {384 288 768 288} {384 288 1152 288} {384 288 1536 288} {384 288 1920 288} {384 288 2304 288} {384 288 2688 288} {384 288 3072 288} {384 288 3456 288} 
+{384 288 0 576} {384 288 384 576} {384 288 768 576} {384 288 1152 576} {384 288 1536 576} {384 288 1920 576} {384 288 2304 576} {384 288 2688 576} {384 288 3072 576} {384 288 3456 576} 
+{384 288 0 864} {384 288 384 864}                                                                            {384 288 2304 864} {384 288 2688 864} {384 288 3072 864} {384 288 3456 864} 
+{384 288 0 1152} {384 288 384 1152}                                                                          {384 288 2304 1152} {384 288 2688 1152} {384 288 3072 1152} {384 288 3456 1152} 
+{384 288 0 1440} {384 288 384 1440}                                                                          {384 288 2304 1440} {384 288 2688 1440} {384 288 3072 1440} {384 288 3456 1440}
+{384 288 0 1728} {384 288 384 1728}                                                                          {384 288 2304 1728} {384 288 2688 1728} {384 288 3072 1728} {384 288 3456 1728}
+}
+	set raidhash(84) { {1392 1044 0 783}
+{348 261 0 0 } {348 261 348 0} {348 261 696 0} {348 261 1044 0} {348 261 1392 0} {348 261 1740 0} {348 261 2088 0} {348 261 2436 0} {348 261 2784 0} {348 261 3132 0} {348 261 3480 0 } 
+{348 261 0 261} {348 261 348 261} {348 261 696 261} {348 261 1044 261} {348 261 1392 261} {348 261 1740 261} {348 261 2088 261} {348 261 2436 261} {348 261 2784 261} {348 261 3132 261} {348 261 3480 261} 
+{348 261 0 522} {348 261 348 522} {348 261 696 522} {348 261 1044 522} {348 261 1392 522} {348 261 1740 522} {348 261 2088 522} {348 261 2436 522} {348 261 2784 522} {348 261 3132 522} {348 261 3480 522} 
+                                                                       {348 261 1392 783} {348 261 1740 783} {348 261 2088 783} {348 261 2436 783} {348 261 2784 783} {348 261 3132 783} {348 261 3480 783} 
+                                                                       {348 261 1392 1044} {348 261 1740 1044} {348 261 2088 1044} {348 261 2436 1044} {348 261 2784 1044} {348 261 3132 1044} {348 261 3480 1044} 
+                                                                       {348 261 1392 1305} {348 261 1740 1305} {348 261 2088 1305} {348 261 2436 1305} {348 261 2784 1305} {348 261 3132 1305} {348 261 3480 1305} 
+                                                                       {348 261 1392 1566} {348 261 1740 1566} {348 261 2088 1566} {348 261 2436 1566} {348 261 2784 1566} {348 261 3132 1566} {348 261 3480 1566} 
+{348 261 0 1827} {348 261 348 1827} {348 261 696 1827} {348 261 1044 1827} {348 261 1392 1827} {348 261 1740 1827} {348 261 2088 1827} {348 261 2436 1827} {348 261 2784 1827} {348 261 3132 1827} {348 261 3480 1827} 
+{348 261 0 2088} {348 261 348 2088} {348 261 696 2088} {348 261 1044 2088} {348 261 1392 2088} {348 261 1740 2088} {348 261 2088 2088} {348 261 2436 2088} {348 261 2784 2088} {348 261 3132 2088} {348 261 3480 2088} 
+}
+	#set raidhash(80) {{480 360 0 0} {1440 1080 960 1080} {480 360 480 0} {480 360 960 0} {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} {480 360 1920 360} {480 360 2400 360} {480 360 2880 360} {480 360 3360 360} {480 360 0 720} {480 360 480 720} {480 360 960 720} {480 360 1440 720} {480 360 1920 720} {480 360 2400 720} {480 360 2880 720} {480 360 3360 720} {480 360 0 1080} {480 360 480 1080} {480 360 2400 1080} {480 360 2880 1080} {480 360 3360 1080} {480 360 0 1440} {480 360 480 1440} {480 360 2400 1440} {480 360 2880 1440} {480 360 3360 1440} {480 360 0 1800} {480 360 480 1800} {480 360 2400 1800} {480 360 2880 1800} {480 360 3360 1800} {480 360 0 0} {1440 1080 960 1080} {480 360 480 0} {480 360 960 0} {480 360 1440 0} {480 360 1920 0} {480 360 2400 0} {480 360 2880 0} {480 360 3360 0} {480 360 0 360} {480 360 480 360} {480 360 960 360} {480 360 1440 360} {480 360 1920 360} {480 360 2400 360} {480 360 2880 360} {480 360 3360 360} {480 360 0 720} {480 360 480 720} {480 360 960 720} {480 360 1440 720} {480 360 1920 720} {480 360 2400 720} {480 360 2880 720} {480 360 3360 720} {480 360 0 1080} {480 360 480 1080} {480 360 2400 1080} {480 360 2880 1080} {480 360 3360 1080} {480 360 0 1440} {480 360 480 1440} {480 360 2400 1440} {480 360 2880 1440} {480 360 3360 1440} {480 360 0 1800} {480 360 480 1800} {480 360 2400 1800} {480 360 2880 1800} {480 360 3360 1800}}
 		}
 	} elseif { $monitor == "3360x1440" } {
 	  #3360x1440
@@ -597,9 +623,12 @@ if { $use2monitors } {
 	}
 	foreach raid [array names windowcount] { 
 	  #Set window count in each raid to something I actually have a hash for
-		if {$windowcount($raid) > 25} { set windowcount($raid) 40
+		if {$windowcount($raid) > 55} { set windowcount($raid) 84
+		} elseif {$windowcount($raid) > 40} { set windowcount($raid) 55
+		} elseif {$windowcount($raid) > 25} { set windowcount($raid) 40
 		} elseif {$windowcount($raid) > 20 } { set windowcount($raid) 25  
-		} elseif {$windowcount($raid) > 10 } { set windowcount($raid) 20  
+		} elseif {$windowcount($raid) > 15 } { set windowcount($raid) 20  
+		} elseif {$windowcount($raid) > 10 } { set windowcount($raid) 15  
 		} elseif {$windowcount($raid) > 5 } { set windowcount($raid) 10  
 		} 
 		set windex($raid) 0
@@ -634,9 +663,29 @@ if { $use2monitors } {
 			#puts $hK ""
 		#}
 	#}
+	puts $hK "  <Command LaunchWow>"
+	puts $hK "	<SendPC %1%>"
+	puts $hK "	< Open \"$curdir/Wow.exe\" >"
+	puts $hK "  <Command RenameWindow>"
+	puts $hK "	<SendPC %1%>"
+	puts $hK "	<RenameWin \"World of Warcraft\" %2%>"
+	puts $hK {  <Command AccInfoWindowPosWindowSize>
+	<SendPC %1%>
+	<TargetWin %2%>
+	<SetForegroundWin>
+	<SetWinRedraw off>
+	<SetWinRect %5% %6% %7% %8%>
+	<SetWinRedraw on>
+	<UpdateWin>
+	<wait 50><Key Backspace>
+	<wait 75><Text %3%>
+	<wait 75><Key Tab>
+	<wait 25><Key Backspace>
+	<wait 50><Text %4%>
+	<wait 75><Key Enter>}
 	foreach mainraid $mainraids {
 		puts $hK ""
-		puts $hK "<Hotkey ScrollLockOn Alt Ctrl $mainraid>"
+		puts $hK "  <Hotkey ScrollLockOn Alt Ctrl N>"
 		#puts "mainraid is $mainraid"
 		set arrayname group${mainraid}
 		#puts "arrayname is $arrayname"
@@ -660,8 +709,84 @@ if { $use2monitors } {
 			#puts "passwd is $passwd"
 	  		#puts "winname is ${toonname}_${cpunum}$acct_winname($account)"
 	  		set winname ${toonname}_${cpunum}$acct_winname($account)
-	  		puts $hK "  <if WinDoesNotExist $winname>"
-	  		puts $hK "  <LaunchAndRename $computer($cpunum) $winname $bnet_account $passwd [lindex $raidhash($windowcount($myraid)) $windex($myraid)] $toonname>"
+	  		puts $hK "	<if WinDoesNotExist $winname>"
+	  		puts $hK "	<LaunchAndRename $computer($cpunum) $winname $bnet_account $passwd [lindex $raidhash($windowcount($myraid)) $windex($myraid)] $toonname>"
+			incr windex($myraid)
+		}
+		puts $hK ""
+		puts $hK "  <Hotkey ScrollLockOn Alt Ctrl $mainraid>"
+		#puts "mainraid is $mainraid"
+		set arrayname group${mainraid}
+		#puts "arrayname is $arrayname"
+		#puts "array size is [array size $arrayname]"
+		#for { set i 0 } { $i<[array size $arrayname] } { incr i } {
+			#puts "Array $arrayname $i contains [array get $arrayname $i]"
+		#}
+		for { set i 0 } { $i<[array size $arrayname] } { incr i } {
+			set thistoon [lindex [array get $arrayname $i] 1]
+			#puts "thistoon is $thistoon"
+	  		set toonname [string tolower [lindex $thistoon 3]]
+			#puts "toonname is $toonname"
+	  		set myraid [lindex $thistoon 5]
+			#puts "myraid is $myraid"
+			regexp {([a-z]|[A-Z])([0-9])?} $myraid match foo cpunum
+			#puts "cpunum is $cpunum"
+	  		set bnet_account [lindex $thistoon 0]
+			#puts "bnet_account is [lindex $thistoon 0]"
+	  		set account [lindex $thistoon 1]
+	  		set passwd [lindex $thistoon 2]
+			#puts "passwd is $passwd"
+	  		#puts "winname is ${toonname}_${cpunum}$acct_winname($account)"
+	  		set winname ${toonname}_${cpunum}$acct_winname($account)
+	  		puts $hK "	<if WinDoesNotExist $winname> <LaunchWow $computer($cpunum)>"
+
+			incr windex($myraid)
+		}
+	  	puts $hK "	//<wait 4500>"
+	  	puts $hK "	//<DoHotKey HotKey ScrollLockOn Ctrl Alt K>"
+	  	puts $hK "	//<wait 180>"
+	  	puts $hK "	//<DoHotKey HotKey ScrollLockOn Ctrl Alt J>"
+	  	puts $hK "	//<wait 350>"
+	  	puts $hK "	//<DoHotKey HotKey ScrollLockOn Shift Ctrl $mainraid>"
+		puts $hK "  <Hotkey ScrollLockOn Alt Ctrl K>"
+		for { set i 0 } { $i<[array size $arrayname] } { incr i } {
+			set thistoon [lindex [array get $arrayname $i] 1]
+			#puts "thistoon is $thistoon"
+	  		set toonname [string tolower [lindex $thistoon 3]]
+			#puts "toonname is $toonname"
+	  		set myraid [lindex $thistoon 5]
+			#puts "myraid is $myraid"
+			regexp {([a-z]|[A-Z])([0-9])?} $myraid match foo cpunum
+			#puts "cpunum is $cpunum"
+	  		set bnet_account [lindex $thistoon 0]
+			#puts "bnet_account is [lindex $thistoon 0]"
+	  		set account [lindex $thistoon 1]
+	  		set passwd [lindex $thistoon 2]
+			#puts "passwd is $passwd"
+	  		#puts "winname is ${toonname}_${cpunum}$acct_winname($account)"
+	  		set winname ${toonname}_${cpunum}$acct_winname($account)
+	  		puts $hK "	<if WinDoesNotExist $winname> <RenameWindow $computer($cpunum) $winname>"
+			incr windex($myraid)
+		}
+		puts $hK ""
+		puts $hK "  <Hotkey ScrollLockOn Alt Ctrl J>"
+		for { set i 0 } { $i<[array size $arrayname] } { incr i } {
+			set thistoon [lindex [array get $arrayname $i] 1]
+			#puts "thistoon is $thistoon"
+	  		set toonname [string tolower [lindex $thistoon 3]]
+			#puts "toonname is $toonname"
+	  		set myraid [lindex $thistoon 5]
+			#puts "myraid is $myraid"
+			regexp {([a-z]|[A-Z])([0-9])?} $myraid match foo cpunum
+			#puts "cpunum is $cpunum"
+	  		set bnet_account [lindex $thistoon 0]
+			#puts "bnet_account is [lindex $thistoon 0]"
+	  		set account [lindex $thistoon 1]
+	  		set passwd [lindex $thistoon 2]
+			#puts "passwd is $passwd"
+	  		#puts "winname is ${toonname}_${cpunum}$acct_winname($account)"
+	  		set winname ${toonname}_${cpunum}$acct_winname($account)
+	  		puts $hK "	<AccInfoWindowPosWindowSize $computer($cpunum) $winname $bnet_account $passwd>"
 			incr windex($myraid)
 		}
 		foreach raid [array names windowcount] { 
@@ -671,16 +796,16 @@ if { $use2monitors } {
 			#puts $hK "\t<RemoveFrames>"
 		#}
 		puts $hK ""
-		puts $hK "<Hotkey ScrollLockOn Shift Ctrl $mainraid>"
+		puts $hK "  <Hotkey ScrollLockOn Shift Ctrl $mainraid>"
 		for { set i 0 } { $i<[array size $arrayname] } { incr i } {
 			set thistoon [lindex [array get $arrayname $i] 1]
-	  	set toonname [string tolower [lindex $thistoon 3]]
-	  	set myraid [lindex $thistoon 5]
-		regexp {([a-z]|[A-Z])([0-9])?} $myraid match foo cpunum
-	  	set account [lindex $thistoon 1]
-	  	set passwd [lindex $thistoon 2]
-	  	set winname ${toonname}_${cpunum}$acct_winname($account)
-	  	puts $hK "  <ResetWindowPosition $computer($cpunum) $winname [lindex $raidhash($windowcount($myraid)) $windex($myraid)]>"
+	  		set toonname [string tolower [lindex $thistoon 3]]
+	  		set myraid [lindex $thistoon 5]
+			regexp {([a-z]|[A-Z])([0-9])?} $myraid match foo cpunum
+	  		set account [lindex $thistoon 1]
+	  		set passwd [lindex $thistoon 2]
+	  		set winname ${toonname}_${cpunum}$acct_winname($account)
+	  		puts $hK "	<ResetWindowPosition $computer($cpunum) $winname [lindex $raidhash($windowcount($myraid)) $windex($myraid)]>"
 			incr windex($myraid)
 		}
 	}
@@ -737,12 +862,17 @@ if { $use2monitors } {
 	foreach mainraid $mainraids {
 		#Win swapping only happens for main raid m
 		#puts "mainraid is $mainraid"
+		puts $hK {// This next group of hotkeys is how you swap windows with the keypad numbers.}
 		set arrayname group${mainraid}
 		regexp {([a-z]|[A-Z])([0-9])?} $mainraid match raidletter cpunum
 		if { $raidletter ne "m" } { continue } 
 		for  { set x 0 } { $x<[array size $arrayname] } { incr x} {
-			puts $hK "<Hotkey ScrollLockOn [lindex $winswapkeys $x]>"
-			puts $hK "<SaveMousePos>"
+			if { $x > 19 } { break }
+			if { $x > 9 } { puts $hK "  <Hotkey ScrollLockOn Shift [lindex $winswapkeys [expr $x - 10]]>"
+			} else {
+			  puts $hK "  <Hotkey ScrollLockOn [lindex $winswapkeys $x]>"
+		        }
+			puts $hK "	<SaveMousePos>"
 			foreach raid [array names windowcount] { 
 				set windex($raid) 0
 			}
@@ -766,22 +896,42 @@ if { $use2monitors } {
 				set win7 [list [lindex $winset 7 ]]
 				set win8 [list [lindex $winset 8 ]]
 				set win9 [list [lindex $winset 9 ]]
+				set win10 [list [lindex $winset 10 ]]
+				set win11 [list [lindex $winset 11 ]]
+				set win12 [list [lindex $winset 12 ]]
+				set win13 [list [lindex $winset 13 ]]
+				set win14 [list [lindex $winset 14 ]]
+				set win15 [list [lindex $winset 15 ]]
+				set win16 [list [lindex $winset 16 ]]
+				set win17 [list [lindex $winset 17 ]]
+				set win18 [list [lindex $winset 18 ]]
+				set win19 [list [lindex $winset 19 ]]
 				set swaplist [list \
-					"$win0 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9" \
-					"$win1 $win0 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9" \
-					"$win2 $win1 $win0 $win3 $win4 $win5 $win6 $win7 $win8 $win9" \
-					"$win3 $win1 $win2 $win0 $win4 $win5 $win6 $win7 $win8 $win9" \
-					"$win4 $win1 $win2 $win3 $win0 $win5 $win6 $win7 $win8 $win9" \
-					"$win5 $win1 $win2 $win3 $win4 $win0 $win6 $win7 $win8 $win9" \
-					"$win6 $win1 $win2 $win3 $win4 $win5 $win0 $win7 $win8 $win9" \
-					"$win7 $win1 $win2 $win3 $win4 $win5 $win6 $win0 $win8 $win9" \
-					"$win8 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win0 $win9" \
-					"$win9 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win0" \
+					"$win0 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win1 $win0 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win2 $win1 $win0 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win3 $win1 $win2 $win0 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win4 $win1 $win2 $win3 $win0 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win5 $win1 $win2 $win3 $win4 $win0 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win6 $win1 $win2 $win3 $win4 $win5 $win0 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win7 $win1 $win2 $win3 $win4 $win5 $win6 $win0 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win8 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win0 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win9 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win0 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win10 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win0 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win11 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win0 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win12 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win0 $win13 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win13 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win0 $win14 $win15 $win16 $win17 $win18 $win19" \
+					"$win14 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win0 $win15 $win16 $win17 $win18 $win19" \
+					"$win15 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win0 $win16 $win17 $win18 $win19" \
+					"$win16 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win0 $win17 $win18 $win19" \
+					"$win17 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win0 $win18 $win19" \
+					"$win18 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win0 $win19" \
+					"$win19 $win1 $win2 $win3 $win4 $win5 $win6 $win7 $win8 $win9 $win10 $win11 $win12 $win13 $win14 $win15 $win16 $win17 $win18 $win0" \
 					]
-	  			puts $hK "<ResetWindowPosition $computer($cpunum) $winname [lindex $swaplist $x $windex($myraid) ]>"
+	  			puts $hK "	<ResetWindowPosition $computer($cpunum) $winname [lindex $swaplist $x $windex($myraid) ]>"
 				incr windex($myraid)
 			}
-			puts $hK "<RestoreMousePos>"
+			puts $hK "	<RestoreMousePos>"
 		}
 	}
 #				file mkdir WTF
@@ -829,57 +979,83 @@ if { $use2monitors } {
 	}
 	set winlabels "${winlabels}>"
 	puts $hK "" 
-	puts $hK {<Hotkey ScrollLockOn Numpad1>
+	puts $hK {  <Hotkey ScrollLockOn Numpad1>
 	<DoHotKey Hotkey ScrollLockOn NumpadEnd>
-<Hotkey ScrollLockOn Numpad2>
+  <Hotkey ScrollLockOn Numpad2>
 	<DoHotKey Hotkey ScrollLockOn NumpadDown>
-<Hotkey ScrollLockOn Numpad3>
+  <Hotkey ScrollLockOn Numpad3>
 	<DoHotKey Hotkey ScrollLockOn NumpadPgDn>
-<Hotkey ScrollLockOn Numpad4>
+  <Hotkey ScrollLockOn Numpad4>
 	<DoHotKey Hotkey ScrollLockOn NumpadLeft>
-<Hotkey ScrollLockOn Numpad5>
+  <Hotkey ScrollLockOn Numpad5>
 	<DoHotkey Hotkey ScrollLockOn Clear>
-<Hotkey ScrollLockOn Numpad6>
+  <Hotkey ScrollLockOn Numpad6>
 	<DoHotkey Hotkey ScrollLockOn NumpadRight>
-<Hotkey ScrollLockOn Numpad7>
+  <Hotkey ScrollLockOn Numpad7>
 	<DoHotkey Hotkey ScrollLockOn NumpadHome>
-<Hotkey ScrollLockOn Numpad8>
+  <Hotkey ScrollLockOn Numpad8>
 	<DoHotkey Hotkey ScrollLockOn NumpadUp>
-<Hotkey ScrollLockOn Numpad9>
+  <Hotkey ScrollLockOn Numpad9>
 	<DoHotkey Hotkey ScrollLockOn NumpadPgUp>
-<Hotkey ScrollLockOn Numpad0>
+  <Hotkey ScrollLockOn Numpad0>
 	<DoHotkey Hotkey ScrollLockOn NumpadInsert>}
+	puts $hK {  <Hotkey ScrollLockOn Shift Numpad1>
+	<DoHotKey Hotkey ScrollLockOn Shift NumpadEnd>
+  <Hotkey ScrollLockOn Shift Numpad2>
+	<DoHotKey Hotkey ScrollLockOn Shift NumpadDown>
+  <Hotkey ScrollLockOn Shift Numpad3>
+	<DoHotKey Hotkey ScrollLockOn Shift NumpadPgDn>
+  <Hotkey ScrollLockOn Shift Numpad4>
+	<DoHotKey Hotkey ScrollLockOn Shift NumpadLeft>
+  <Hotkey ScrollLockOn Shift Numpad5>
+	<DoHotkey Hotkey ScrollLockOn Shift Clear>
+  <Hotkey ScrollLockOn Shift Numpad6>
+	<DoHotkey Hotkey ScrollLockOn Shift NumpadRight>
+  <Hotkey ScrollLockOn Shift Numpad7>
+	<DoHotkey Hotkey ScrollLockOn Shift NumpadHome>
+  <Hotkey ScrollLockOn Shift Numpad8>
+	<DoHotkey Hotkey ScrollLockOn Shift NumpadUp>
+  <Hotkey ScrollLockOn Shift Numpad9>
+	<DoHotkey Hotkey ScrollLockOn Shift NumpadPgUp>
+  <Hotkey ScrollLockOn Shift Numpad0>
+	<DoHotkey Hotkey ScrollLockOn Shift NumpadInsert>}
 	puts $hK ""
 	puts $hK {// This is the hotkey that closes all windows-- Ctrl-Alt-o (letter O)	}
-	puts $hK "<Hotkey ScrollLockOn Alt Ctrl o>"
+	puts $hK "  <Hotkey ScrollLockOn Alt Ctrl o>"
 	puts $hK $winlabels
-	puts $hK {  <CloseWin>
+	puts $hK {	<CloseWin>
 	}
 	puts $hK "" 
 	puts $hK {// This is a special hotkey I made for reloading all your user interfaces in wow.}
 	puts $hK {// Ctrl-L (case never matters) will enter /reload into each window}
-	puts $hK "<Hotkey ScrollLockOn Ctrl l>"
+	puts $hK "  <Hotkey ScrollLockOn Ctrl l>"
 	puts $hK $winlabels
-	puts $hK {  <Key enter>
-	  <Wait 250>
-	  <Key divide>
-	  <Wait 25>
-	  <Text reload>
-	  <Wait 175>
-	  <Key enter>
-	}
+	puts $hK {	<Key enter>
+	<Wait 250>
+	<Key divide>
+	<Wait 25>
+	<Text reload>
+	<Wait 175>
+	<Key enter>
+}
 	puts $hK {// This is the true magic...this runs /init in each window to set up bindings and macros!
 // Ctrl-i}
-	puts $hK "<Hotkey ScrollLockOn Ctrl i>"
+	puts $hK "  <Hotkey ScrollLockOn Ctrl i>"
 	puts $hK $winlabels
-	puts $hK {  <Key enter>
-	  <Wait 250>
-	  <Key divide>
-	  <Wait 25>
-	  <Text init>
-	  <Wait 175>
-	  <Key enter>
-	}
+	puts $hK {	<Key enter>
+	<Wait 250>
+	<Key divide>
+	<Wait 25>
+	<Text init>
+	<Wait 175>
+	<Key enter>
+}
+	puts $hK {// This sends enter to each window to log in
+// Ctrl-i}
+	puts $hK "  <Hotkey ScrollLockOn Ctrl e>"
+	puts $hK $winlabels
+	puts $hK {	<Key enter>
+}
 	puts $hK {//-----------------------------------------------------------
 // This is the key you hold down to send mouse clicks to all windows.
 // I use ~ (the key to the left of the 1 key)
@@ -894,19 +1070,23 @@ if { $use2monitors } {
 	#puts $hK {      <Wait 5>}
 	#puts $hK {      <RestoreMousePos>}
 	#puts $hK ""
-	puts $hK "<UseKeyAsModifier $oem>"
-	puts $hK "<Hotkey ScrollLockOn $oem LButton, RButton, Button4, Button5>"
+	puts $hK "  <UseKeyAsModifier $oem>"
+	puts $hK "  <Hotkey ScrollLockOn $oem LButton, RButton, Button4, Button5>"
 
-	puts $hK $winlabels
+	#puts $hK $winlabels
 	#puts $hK {      <Cancel>}
-	puts $hK {      <SaveMousePos>}
+	#puts $hK {	<SaveMousePos>}
 	#foreach label [split $winlabels ","] {
 	  #set label [regsub {\>$} $label ""]
 	  #if { ![regexp {^w} $label] } { continue } 
 	  #puts $hK "      <SendLabel $label> <ClickMouse %TriggerMainKey% >"
         #}
-	puts $hK {      <ClickMouse %TriggerMainKey% >}
-	puts $hK {      <ClickMouse %TriggerMainKey% >}
+	puts $hK {      <SaveMousePos>}
+	puts $hK {      <Wait 5>}
+	puts $hK $winlabels
+	puts $hK {      <ClickMouse %TriggerMainKey%>}
+	puts $hK {      <ClickMouse %TriggerMainKey%>}
+	puts $hK {      <Wait 5>}
 	puts $hK {      <RestoreMousePos>}
 	puts $hK ""
 	#puts $hK "<CreateColoredButton clique $clique_overlay 0x101010 0x101010>"
@@ -938,9 +1118,9 @@ if { $use2monitors } {
 // Notice there is an exception list at the end.
 // The word %Trigger% gets replaced with whatever key you clicked.
 //-----------------------------------------------------------
-<Hotkey ScrollLockOn A-Z, 1-9, Shift, Ctrl, Alt, Plus, Minus, Esc , Divide, F1-F12 except 1-6,E,F,Q,H, W, A, S, D, R, T, Y, I, U, J, V>}
+  <Hotkey ScrollLockOn A-Z, 1-9, Shift, Ctrl, Alt, Plus, Minus, Esc , Divide, F1-F12 except 1-6,E,F,Q,H, W, A, S, D, R, T, Y, I, U, J, V>}
 	puts $hK $winlabels
-	puts $hK { <Key %Trigger%>}
+	puts $hK {	<Key %Trigger%>}
 	puts $hK ""
 	puts $hK {//-----------------------------------------------------------
 // THIS KEY IS DIFFERENT. THESE are MOVEMENT key definitions.
@@ -951,7 +1131,7 @@ if { $use2monitors } {
 // wow movement keys to move your side  toons.
 // Use the arrow keys for that. (see, they are there)
 //-----------------------------------------------------------
-	<MovementHotkey ScrollLockOn space, up, down, left, right,e,q>}
+  <MovementHotkey ScrollLockOn space, up, down, left, right,e,q>}
 	puts $hK $winlabels
 	puts $hK "\t<Key %Trigger%>"
 	puts $hK ""
@@ -963,7 +1143,7 @@ puts $hK {//You can even make special movement keys for just some of your toons.
   	}
 	if {$hunter_present} { 
 		puts $hK {//Hunter backup}
-		puts $hK {<MovementHotkey ScrollLockOn T>}
+		puts $hK {  <MovementHotkey ScrollLockOn T>}
 		set totallabels 0
 		set hunterlabels "\t<Sendlabel"
 		for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -984,7 +1164,7 @@ puts $hK {//You can even make special movement keys for just some of your toons.
 		}
 		set hunterlabels "${hunterlabels}>"
 		puts $hK $hunterlabels
-		puts $hK "  <Key Down>"
+		puts $hK "	<Key Down>"
 		puts $hK ""
 	}
         set melee_present 0
@@ -994,7 +1174,7 @@ puts $hK {//You can even make special movement keys for just some of your toons.
   	}
 	if {$melee_present} {
 		puts $hK {//Melee backup}
-		puts $hK {<MovementHotkey ScrollLockOn v>}
+		puts $hK {  <MovementHotkey ScrollLockOn v>}
 		set totallabels 0
 		set meleelabels "\t<Sendlabel"
 		for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -1015,10 +1195,10 @@ puts $hK {//You can even make special movement keys for just some of your toons.
 		}
 		set meleelabels "${meleelabels}>"
 		puts $hK $meleelabels
-		puts $hK "  <Key Down>"
+		puts $hK "	<Key Down>"
 		puts $hK ""
 		puts $hK {//Melee forward}
-		puts $hK {<MovementHotkey ScrollLockOn r>}
+		puts $hK {  <MovementHotkey ScrollLockOn r>}
 		set totallabels 0
 		set meleelabels "\t<Sendlabel"
 		for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -1039,7 +1219,7 @@ puts $hK {//You can even make special movement keys for just some of your toons.
 		}
 		set meleelabels "${meleelabels}>"
 		puts $hK $meleelabels
-		puts $hK "  <Key Up>"
+		puts $hK "	<Key Up>"
 		puts $hK ""
 	}
         set healer_present 0
@@ -1049,7 +1229,7 @@ puts $hK {//You can even make special movement keys for just some of your toons.
   	}
 	if {$healer_present} {
 		puts $hK {//Healer backup}
-		puts $hK {<MovementHotkey ScrollLockOn Y>}
+		puts $hK {  <MovementHotkey ScrollLockOn Y>}
 		set totallabels 0
 		set healerlabels "\t<Sendlabel"
 		for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -1071,7 +1251,7 @@ puts $hK {//You can even make special movement keys for just some of your toons.
 		}
 		set healerlabels "${healerlabels}>"
 		puts $hK $healerlabels
-		puts $hK "  <Key Down>"
+		puts $hK "	<Key Down>"
 		puts $hK ""
 	}
         set mana_present 0
@@ -1081,7 +1261,7 @@ puts $hK {//You can even make special movement keys for just some of your toons.
   	}
 	if {$mana_present} {
 		puts $hK {//Mana backup}
-		puts $hK {<MovementHotkey ScrollLockOn H>}
+		puts $hK {  <MovementHotkey ScrollLockOn H>}
 		set totallabels 0
 		set manalabels "\t<Sendlabel"
 		for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -1102,7 +1282,7 @@ puts $hK {//You can even make special movement keys for just some of your toons.
 		}
 		set manalabels "${manalabels}>"
 		puts $hK $manalabels
-		puts $hK "  <Key Down>"
+		puts $hK "	<Key Down>"
 		puts $hK ""
 	}
 puts $hK {//-------------------------------------------------------------
@@ -1110,7 +1290,7 @@ puts $hK {//-------------------------------------------------------------
 
 // First trick key--when you hit 0, only send it to the window where your mouse is.
 // 
-<Hotkey ScrollLockOn 0>
+  <Hotkey ScrollLockOn 0>
 	<SendFocusWin>
 	<Key 0>
 }
@@ -1119,7 +1299,7 @@ puts $hK {//-------------------------------------------------------------
 // So alt-1 forces people to assist main.
 // I do it this way so you only have to change one macro to change your main.
 // Don't put assist in your dps macros.
-<Hotkey ScrollLockOn Alt 1>}
+  <Hotkey ScrollLockOn Alt 1>}
 	puts $hK $winlabels
 	puts $hK "\t<Key Alt 1>"
 	set totallabels 0
@@ -1149,7 +1329,7 @@ puts $hK {//-------------------------------------------------------------
 	}
 	puts $hK ""
 	puts $hK {// Same magic for 2-6}
-	puts $hK {<Hotkey ScrollLockOn 2-6>}
+	puts $hK {  <Hotkey ScrollLockOn 2-6>}
 	puts $hK $winlabels
 	puts $hK "\t<Key %Trigger%>"
 	set totallabels 0
@@ -1177,7 +1357,7 @@ puts $hK {//-------------------------------------------------------------
 			incr totallabels
 		}
 	}
-	puts $hK {<Hotkey ScrollLockOn 1>}
+	puts $hK {  <Hotkey ScrollLockOn 1>}
 	puts $hK $winlabels
 	puts $hK "\t<Key 1>"
 	set meleewinlabs ""
@@ -1225,10 +1405,10 @@ puts $hK {//-------------------------------------------------------------
 	puts $hK ""
 	puts $hK {// Now--ANY KEY that uses a HKN MODIFIER (alt/ctrl/shift) WILL NOT WORK.
 // UNLESS.......you define it!
-<Hotkey ScrollLockOn Alt 2>}
+  <Hotkey ScrollLockOn Alt 2>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt 2> 
-<Hotkey ScrollLockOn Alt 3>}
+  <Hotkey ScrollLockOn Alt 3>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt 3> }
 	puts $hK ""
@@ -1236,7 +1416,7 @@ puts $hK {//-------------------------------------------------------------
 // It also sends an F10 (a macro with /follow furyswipes) and F11 (the assist macro)
 // So alt-4 is how you make your toons follow again.
 // YOU WILL USE ALT-4 CONSTANTLY. GET USED TO IT, SUCKAS.
-<Hotkey ScrollLockOn Alt 4>
+  <Hotkey ScrollLockOn Alt 4>
 	<ResetToggles>}
 	set totallabels 0
 	for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -1273,7 +1453,7 @@ puts $hK {//-------------------------------------------------------------
 // When you hit it a second time. LEEEEEEEEROYYYYYY!!!!!!!
 // Everyone will attack your target or open a vendor, OR skin a dead animal,
 // ...you get the idea.
-<Hotkey ScrollLockOn f>
+  <Hotkey ScrollLockOn f>
 	<toggle>}
 	set totallabels 0
 	for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -1308,7 +1488,7 @@ puts $hK {//-------------------------------------------------------------
 	puts $hK {// Awesome magic here. I put an interrupt skill in shift-3 action bar.
 // this goes through each one at a time
 // (after focusing on main's target on the first click)
-<Hotkey ScrollLockOn Shift 3>
+  <Hotkey ScrollLockOn Shift 3>
 	<Toggle>}
 	set totallabels 0
 	for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -1342,7 +1522,7 @@ puts $hK {//-------------------------------------------------------------
 	}
 	puts $hK ""
 	puts $hK {// Shift-4 is also a skill that focuses tank target.
-<Hotkey ScrollLockOn Shift 4> }
+  <Hotkey ScrollLockOn Shift 4> }
 	set totallabels 0
 	for { set i 0 } { $i<[array size toons] } { incr i } {
 	  set toonname [string tolower [lindex $toons($i) 3]]
@@ -1373,78 +1553,78 @@ puts $hK {//-------------------------------------------------------------
 	puts $hK "\t<Key Shift 4>"
 	puts $hK ""
 	puts $hK {// More boring modifier maps--has to be done}
-	puts $hK {<Hotkey ScrollLockOn Alt 5>}
+	puts $hK {  <Hotkey ScrollLockOn Alt 5>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt 5> }
-	puts $hK {<Hotkey ScrollLockOn Alt 6>}
+	puts $hK {  <Hotkey ScrollLockOn Alt 6>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt 6> }
-	puts $hK {<Hotkey ScrollLockOn Alt 7>}
+	puts $hK {  <Hotkey ScrollLockOn Alt 7>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt 7> }
-	puts $hK {<Hotkey ScrollLockOn Alt 8>}
+	puts $hK {  <Hotkey ScrollLockOn Alt 8>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt 8> }
-	puts $hK {<Hotkey ScrollLockOn Alt 9>}
+	puts $hK {  <Hotkey ScrollLockOn Alt 9>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt 9> }
-	puts $hK {<Hotkey ScrollLockOn Alt 0>}
+	puts $hK {  <Hotkey ScrollLockOn Alt 0>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt 0> }
-	puts $hK {<Hotkey ScrollLockOn Alt Plus>}
+	puts $hK {  <Hotkey ScrollLockOn Alt Plus>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt Plus> }
-	puts $hK {<Hotkey ScrollLockOn Alt Minus>}
+	puts $hK {  <Hotkey ScrollLockOn Alt Minus>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt Minus> }
 	puts $hK {// Special one for ctrl-alt-1 if you ever need it.}
-	puts $hK {<Hotkey ScrollLockOn Ctrl Alt 1>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl Alt 1>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl Alt 1>}
-	puts $hK {<Hotkey ScrollLockOn Alt F1>}
+	puts $hK {  <Hotkey ScrollLockOn Alt F1>}
 	puts $hK $winlabels
 	puts $hK {	<Key Alt F1>}
-	puts $hK {<Hotkey ScrollLockOn Ctrl 1>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 1>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 1>}
-	puts $hK {<Hotkey ScrollLockOn Ctrl 2> }
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 2> }
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 2> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl 3>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 3>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 3> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl 4>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 4>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 4> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl 5>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 5>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 5> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl 6>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 6>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 6> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl 7>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 7>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 7> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl 8>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 8>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 8> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl 9>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 9>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 9> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl 0>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl 0>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl 0> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl Plus>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl Plus>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl Plus> }
-	puts $hK {<Hotkey ScrollLockOn Ctrl Minus>}
+	puts $hK {  <Hotkey ScrollLockOn Ctrl Minus>}
 	puts $hK $winlabels
 	puts $hK {	<Key Ctrl Minus> }
-	puts $hK {<Hotkey ScrollLockOn Shift 1>}
+	puts $hK {  <Hotkey ScrollLockOn Shift 1>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift 1>}
 	puts $hK {// Shift 2 is the polymorph button. First click is assist tank, second click is poly}
-	puts $hK {<Hotkey ScrollLockOn Shift 2>}
+	puts $hK {  <Hotkey ScrollLockOn Shift 2>}
         puts $hK "\t<toggle>"
 	set totallabels 0
 	for { set i 0 } { $i<[array size toons] } { incr i } {
@@ -1474,67 +1654,66 @@ puts $hK {//-------------------------------------------------------------
 	puts $hK {	<toggle>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift 2> }
-	puts $hK {<Hotkey ScrollLockOn Shift 5>}
+	puts $hK {  <Hotkey ScrollLockOn Shift 5>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift 5> }
-	puts $hK {<Hotkey ScrollLockOn Shift 6>}
+	puts $hK {  <Hotkey ScrollLockOn Shift 6>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift 6> }
-	puts $hK {<Hotkey ScrollLockOn Shift 7>}
+	puts $hK {  <Hotkey ScrollLockOn Shift 7>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift 7> }
-	puts $hK {<Hotkey ScrollLockOn Shift 8>}
+	puts $hK {  <Hotkey ScrollLockOn Shift 8>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift 8> }
-	puts $hK {<Hotkey ScrollLockOn Shift 9>}
+	puts $hK {  <Hotkey ScrollLockOn Shift 9>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift 9> }
-	puts $hK {<Hotkey ScrollLockOn Shift 0>}
+	puts $hK {  <Hotkey ScrollLockOn Shift 0>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift 0> }
-	puts $hK {<Hotkey ScrollLockOn Shift Plus>}
+	puts $hK {  <Hotkey ScrollLockOn Shift Plus>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift Plus> }
-	puts $hK {<Hotkey ScrollLockOn Shift Minus>}
+	puts $hK {  <Hotkey ScrollLockOn Shift Minus>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift Minus> }
-	puts $hK {<Hotkey ScrollLockOn Shift F1>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F1>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F1>}
-	puts $hK {<Hotkey ScrollLockOn Shift F2>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F2>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F2> }
-	puts $hK {<Hotkey ScrollLockOn Shift F3>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F3>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F3> }
-	puts $hK {<Hotkey ScrollLockOn Shift F4>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F4>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F4> }
-	puts $hK {<Hotkey ScrollLockOn Shift F5>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F5>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F5> }
-	puts $hK {<Hotkey ScrollLockOn Shift F6>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F6>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F6> }
-	puts $hK {<Hotkey ScrollLockOn Shift F7>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F7>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F7> }
-	puts $hK {<Hotkey ScrollLockOn Shift F8>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F8>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F8> }
-	puts $hK {<Hotkey ScrollLockOn Shift F9>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F9>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F9> }
-	puts $hK {<Hotkey ScrollLockOn Shift F10>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F10>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F10> }
-	puts $hK {<Hotkey ScrollLockOn Shift F11>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F11>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F11> }
-	puts $hK {<Hotkey ScrollLockOn Shift F12>}
+	puts $hK {  <Hotkey ScrollLockOn Shift F12>}
 	puts $hK $winlabels
 	puts $hK {	<Key Shift F12> }
-	puts $hK ""
 	close $hK
 }
 if { ! $nosmoverwrite } { 

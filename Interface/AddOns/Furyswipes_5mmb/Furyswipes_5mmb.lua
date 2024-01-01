@@ -1,11 +1,11 @@
 FSMB_version="111419_retail"
 AceComm=LibStub("AceComm-3.0")
 print('Hello from 5mmb version '..FSMB_version.."!")
-FSMB_toonlist={[1]="Thelnsane",[2]="Elonlnside",[3]="Tolnfinity",[4]="Thelraq",[5]="Anlmpulse",[6]="Eversmile",[7]="Neversmile",[8]="Aslf",[9]="Frawshawwk",[10]="Goodlivin"}
-FSMB_invitelist={[1]="Thelnsane-bladefist",[2]="Elonlnside-bladefist",[3]="Tolnfinity-bladefist",[4]="Thelraq-bladefist",[5]="Anlmpulse-bladefist",[6]="Eversmile-bladefist",[7]="Neversmile-bladefist",[8]="Aslf-bladefist",[9]="Frawshawwk-bladefist",[10]="Goodlivin-bladefist"}
-FSMB_tank="Thelnsane"
+FSMB_toonlist={[1]="Babadoink",[2]="Choinker",[3]="Badoinker",[4]="Doinkado",[5]="Spadoink",[6]="Galdric",[7]="Bauldric",[8]="Janette",[9]="Ror",[10]="Barey"}
+FSMB_invitelist={[1]="Babadoink-bladefist",[2]="Choinker-bladefist",[3]="Badoinker-bladefist",[4]="Doinkado-bladefist",[5]="Spadoink-bladefist",[6]="Galdric-bladefist",[7]="Bauldric-bladefist",[8]="Janette-bladefist",[9]="Ror-bladefist",[10]="Barey-bladefist"}
+FSMB_tank="Babadoink"
 FSMB_nomacros=nil
-FSMB_healerlist={"Anlmpulse","Aslf"}
+FSMB_healerlist={"Badoinker","Janette"}
 FSMB_maxheal={Druid=3,Priest=3,Shaman=5,Paladin=3}
 FSMB_mypoly={["Priest"]="Shackle",["Mage"]="Polymorph",["Druid"]="Hibernate",["Warlock"]="Banish"}
 FSMB_myint={["Paladin"]="Hammer of Justice",["Priest"]="Silence",["Mage"]="Counterspell",["Druid"]="Bash",["Shaman"]="Earth Shock",["Hunter"]="Scatter Shot",["Warlock"]="",["Warrior"]="Pummel",["Rogue"]="Kick",}
@@ -179,6 +179,24 @@ FSMB_myint["PALADIN"]=rebuke
 FSMB_decurse={["MONK"]=(detox),["DEMONHUNTER"]=(consumeMagic),["PALADIN"]=(palaCleanse),["PRIEST"]=(dispelMagic),["MAGE"]=(remLesserCurse),["DRUID"]=(remCurse),["SHAMAN"]=(curePoison),["HUNTER"]="None",["WARLOCK"]="None",["WARRIOR"]="None",["ROGUE"]="None",}
 FSMB_heal_names={["MONK"]=(vivify),["PALADIN"]=(palaHeal),["PRIEST"]=(priestHeal),["DRUID"]=(druidHeal),["SHAMAN"]=(shamanHeal)}
 FSMB_mydecurse=FSMB_decurse[UnitClass("player")]
+function SortRaid()
+	FSMB_toonorder=TableReverse(FSMB_toonlist)
+	for idx=1,40 do
+		member,_,group=GetRaidRosterInfo(idx)
+		if group~=math.ceil(FSMB_toonorder[member]/5) then
+			print(member.." should be in group "..(math.ceil(FSMB_toonorder[member]/5)).." and not "..group)
+			for tidx=math.ceil(FSMB_toonorder[member]/5)*5-4,math.ceil(FSMB_toonorder[member]/5)*5 do
+				tmember,_,tgroup=GetRaidRosterInfo(tidx)
+				if tgroup~=math.ceil(FSMB_toonorder[tmember]/5) then
+					print("Swapping "..idx.." with "..tidx)
+					SwapRaidSubgroup(tidx,idx)
+					return
+				end
+				
+			end
+		end
+	end
+end
 myname=UnitName("player")
 myclass=UnitClass("player")
 mylevel=UnitLevel("player")
@@ -409,16 +427,16 @@ clearmacros()
 	ClearCursor()
 	-- NONE OF THE FOLLOWING MACROS GET CREATED IF YOU put nomacros in your toonlist
 	if not FSMB_nomacros then
-		if myClass=="DRUID" then
-			local macroId = CreateMacroFS("hearth_fs", "INV_Misc_QuestionMark", "/cancelform\n/use "..hearthStone.."", nil);
-			PickupMacro(macroId)
-			PlaceAction(26)
-			ClearCursor()
-		else
-			PickupItem(hearthStone)
-			PlaceAction(26)
-			ClearCursor()
-		end
+		--if myClass=="DRUID" then
+			--local macroId = CreateMacroFS("hearth_fs", "INV_Misc_QuestionMark", "/cancelform\n/use "..hearthStone.."", nil);
+			--PickupMacro(macroId)
+			--PlaceAction(26)
+			--ClearCursor()
+		--else
+			--PickupItem(hearthStone)
+			--PlaceAction(26)
+			--ClearCursor()
+		--end
 		if myClass=="HUNTER" then
 			index=CreateMacroFS("feign_fs","INV_Misc_QuestionMark","/petfollow\n/petpassive\n/stopattack\n/cast "..freezingTrap.."\n/cast "..feignDeath.."",nil)
 			PickupMacro(index)
@@ -569,6 +587,10 @@ clearmacros()
 		index=CreateMacroFS("SETUP_FS_"..myspec,"Spell_magic_polymorphchicken","#showtooltip\n/click [button:1] SETUP_FS_"..myspec.." LeftButton t;\n/petpassive [mod:alt]\n/stopcasting [mod:alt]",nil)
 		PickupMacro(index)
 		PlaceAction(1)
+		if myClass=="ROGUE" then
+			PickupMacro(index)
+			PlaceAction(73)
+		end
 		if myClass=="DRUID" then
 			PickupMacro(index)
 			PlaceAction(13)
@@ -585,6 +607,10 @@ clearmacros()
 		index=CreateMacroFS("SINGLE_FS_"..myspec,"ability_searingarrow","#showtooltip\n/click [button:1] SINGLE_FS_"..myspec.." LeftButton t;",nil)
 		PickupMacro(index)
 		PlaceAction(2)
+		if myClass=="ROGUE" then
+			PickupMacro(index)
+			PlaceAction(74)
+		end
 		if myClass=="DRUID" then
 			PickupMacro(index)
 			PlaceAction(74)
@@ -612,6 +638,10 @@ clearmacros()
 			index=CreateMacroFS("MULTI_FS_"..myspec,"ability_upgrademoonglaive","#showtooltip\n/click [button:1] MULTI_FS_"..myspec.." LeftButton t;",nil)
 		PickupMacro(index)
 		PlaceAction(3)
+		if myClass=="ROGUE" then
+			PickupMacro(index)
+			PlaceAction(75)
+		end
 		if myClass=="DRUID" then
 			PickupMacro(index)
 			PlaceAction(75)
@@ -626,6 +656,10 @@ clearmacros()
 		index=CreateMacroFS("TURBO_FS_"..myspec,"Spell_nature_lightning","#showtooltip\n/click [button:1] TURBO_FS_"..myspec.." LeftButton t;\n/petpassive [mod:alt]\n/run SetView(4)",hunterpersonal)
 		PickupMacro(index)
 		PlaceAction(4)
+		if myClass=="ROGUE" then
+			PickupMacro(index)
+			PlaceAction(76)
+		end
 		if myClass=="DRUID" then
 			PickupMacro(index)
 			PlaceAction(16)
@@ -642,6 +676,10 @@ clearmacros()
 		index=CreateMacroFS("AOE_FS_"..myspec,"spell_fire_selfdestruct","#showtooltip\n/click [button:1] AOE_FS_"..myspec.." LeftButton t;",nil)
 		PickupMacro(index)
 		PlaceAction(5)
+		if myClass=="ROGUE" then
+			PickupMacro(index)
+			PlaceAction(77)
+		end
 		if myClass=="DRUID" then
 			PickupMacro(index)
 			PlaceAction(17)
@@ -658,6 +696,10 @@ clearmacros()
 		index=CreateMacroFS("SHEAL_FS_"..myspec,"spell_nature_healingtouch","#showtooltip\n/click [button:1] SHEAL_FS_"..myspec.." LeftButton t;",nil)
 		PickupMacro(index)
 		PlaceAction(6)
+		if myClass=="ROGUE" then
+			PickupMacro(index)
+			PlaceAction(78)
+		end
 		if myClass=="DRUID" then
 			PickupMacro(index)
 			PlaceAction(18)
@@ -768,9 +810,10 @@ end
 	CompactRaidFrameManager:Show()
 	SetCVar("uiScale", 0.65)
 	SetCVar("useUiScale", 1)
+	SetCVar("renderScale", .5)
 	SetCVar("alwaysShowActionBars", true)
 	SetCVar("nameplateShowEnemies", true)
-	SetCVar("nameplateShowFriends", true)
+	SetCVar("nameplateShowFriends", false)
 	SetCVar("enableFloatingCombatText", true)
 	SetCVar("autointeract", true)
 	SetCVar("autoInteract", true)
@@ -933,13 +976,26 @@ SlashCmdList["FIND"]=function(item)
 	AceComm.SendCommMessage(FSMB,"FSMB_FIND", item ,"RAID") 
 end
 FSMB = CreateFrame("frame","FSMB",UIParent)
-function FSMB:OnCommReceived(prefix,item)
-	FSMB_Find(item)
+function FSMB:OnCommReceived(prefix,msg)
+	--print("AceComm: prefix: "..prefix.." msg: "..msg)
+	if prefix=="FSMB_FIND" then
+		if UnitInRaid("player") then
+			print("Don't use this command in free raids anymore. Say what you want to find. /say find crapgear")
+		else
+			FSMB_Find(msg)
+		end
+	--elseif prefix=="FSMB_FOCUS" then
+		--print(" Focusing " .. msg)
+		--FSMB_raidleader=msg
+		----if not UnitAffectingCombat("player") then FocusUnit(unitname(FSMB_raidleader)) end
+	end
 end
 -- register the events we want to use (this is why we made the frame)
 AceComm.RegisterComm(FSMB,"FSMB_FIND")
+--AceComm.RegisterComm(FSMB,"FSMB_FOCUS")
 FSMB:RegisterEvent("ADDON_LOADED") -- register event "ADDON_LOADED"
 FSMB:RegisterEvent("CHAT_MSG_ADDON")
+FSMB:RegisterEvent("CHAT_MSG_SAY")
 FSMB:RegisterEvent("CONFIRM_SUMMON")
 FSMB:RegisterEvent("TRAINER_SHOW")
 FSMB:RegisterEvent("TRAINER_CLOSED")
@@ -974,12 +1030,20 @@ FSMB:RegisterEvent("AUTOFOLLOW_END")
 FSMBtooltip=CreateFrame("GAMETOOLTIP", "FSMBtooltip", UIParent, "GameTooltipTemplate")
 Print=print
 FSMB:SetScript("OnEvent", function(self,event, arg1, arg2, arg3, ...) -- event handler
-    if (event == "CHAT_MSG_ADDON") then
-        --Print("Addon message recieved from"..arg3)
-        if arg1=="FSMB_FIND" then
+    if (event == "CHAT_MSG_SAY") then
+	if string.find(arg1, "^\s*[Ff][Ii][Nn][Dd] ") then
+		item=string.gsub(arg1, "^\s*[Ff][Ii][Nn][Dd] ","")
+                FSMB_Find(item,arg2)
+	end
+    elseif (event == "CHAT_MSG_ADDON") then
+        --Print("Addon message "..arg1.." / "..arg2.." / "..event.." recieved from"..arg3)
+        --if arg1=="FSMB_FOCUS" then
+		--print(FSMB_RAID.." Focusing " .. arg2)
+		--FSMB_raidleader=arg2
+	if arg1=="FSMB_FIND" then
             local item = arg2
             --print("Got find request for "..item)
-            MB_Find(item)
+            --MB_Find(item)
         end
 		elseif event == "UI_ERROR_MESSAGE" then
 		if arg1 == 50 then
@@ -1077,7 +1141,7 @@ function TableReverse(table)
 	end
 	return t
 end
-function FSMB_Find(item)
+function FSMB_Find(item,caller)
 	FSMB_slotmap={ [0]="ammo",[1]="head",[2]="neck",[3]="shoulder",[4]="shirt",[5]="chest",[6]="waist",[7]="legs",[8]="feet",[9]="wrist",[10]="hands",[11]="finger 1",[12]="finger 2",[13]="trinket 1",[14]="trinket 2",[15]="back",[16]="main hand",[17]="off hand",[18]="ranged",[19]="tabard"}
 	FSMB_slotmap_i=TableReverse(FSMB_slotmap)
 	local Rarity={["poor"]=0,["common"]=1,["uncommon"]=2,["rare"]=3,["epic"]=4,["legendary"]=5}
@@ -1117,11 +1181,11 @@ function FSMB_Find(item)
 				local itemLink = GetInventoryItemLink("player",inv)
 				local quality=GetInventoryItemQuality("player",inv)
 				if not quality then
-					FSMB_msg("MISSING: slot "..FSMB_slotmap[inv])
+					FSMB_msg("MISSING: slot "..FSMB_slotmap[inv],caller)
 				elseif quality<3 then
 					local bsnum=string.gsub(itemLink,".-\124H([^\124]*)\124h.*", "%1")
 					local itemName, _, itemRarity, itemLevel, itemMinLevel, itemType, itemSubType, itemStackCount, itemEquipLoc, itemIcon = GetItemInfo(bsnum)
-					FSMB_msg("CRAP: "..itemEquipLoc.." "..inv.." "..itemLink)
+					FSMB_msg("CRAP: "..itemEquipLoc.." "..inv.." "..itemLink,caller)
 				end
 			end
 		end
@@ -1143,7 +1207,7 @@ function FSMB_Find(item)
 				items=string.lower(item)
 				match = string.find(links, items)
 				if IsUnboundBOE(bag,slot) then
-					FSMB_msg("Found "..link.." in bag "..bag.." slot "..slot)
+					FSMB_msg("Found "..link.." in bag "..bag.." slot "..slot,caller)
 				end
 			end
 		end end
@@ -1178,7 +1242,7 @@ function FSMB_Find(item)
 					match= match or string.find(itemSubType,items)
 				end
 				if match then
-					FSMB_msg("Found "..itemLink.." in slot "..FSMB_slotmap[inv])
+					FSMB_msg("Found "..itemLink.." in slot "..FSMB_slotmap[inv],caller)
 				end
 			end
 		end
@@ -1221,7 +1285,7 @@ function FSMB_Find(item)
 						match= match or string.find(itemSubType,items)
 					end
 					if match then
-						FSMB_msg("Found "..itemTable.hyperlink.."x"..itemTable.stackCount.." in bag "..bag.." slot "..slot)
+						FSMB_msg("Found "..itemTable.hyperlink.."x"..itemTable.stackCount.." in bag "..bag.." slot "..slot,caller)
 					end
 				end
 			end
@@ -1253,7 +1317,7 @@ function IsUnboundBOE(b,s)
 	end
 	if not soulbound and boe then return true end
 end
-function FSMB_msg(msg)
+function FSMB_msg(msg,target)
 	--this is a raid message function with a 2 second cooldown to kind-of avoid some spamming.
 	local cooldown=5
 	local time=GetTime()
@@ -1261,11 +1325,12 @@ function FSMB_msg(msg)
 	MB_prev_msg=msg
 	FSMB_msgcd=time
 	if UnitInRaid("player") then
-		SendChatMessage(msg,"RAID") return
+		--SendChatMessage(msg,"RAID") return
+		SendChatMessage(msg,"WHISPER",nil,target) return
 	else
 		SendChatMessage(msg,"PARTY") return
 	end
-	Print(msg)
+	--Print(msg)
 end
 function RangedWeaponType()
 	local itemLink = GetInventoryItemLink("player",18)
@@ -1444,11 +1509,11 @@ end
 function FSMB_leader()
 	return FSMB_raidleader
 end
-function focusme()
-		if not IsAltKeyDown() then return end
-                FSMB_raidleader=UnitName("player")
-		AceComm.SendCommMessage(FSMB,"FSMB_FOCUS", UnitName("player"),"RAID")
-end
+--function focusme()
+----	if not IsAltKeyDown() then return end
+--FSMB_raidleader=UnitName("player")
+--AceComm.SendCommMessage(FSMB,"FSMB_FOCUS", UnitName("player"),"RAID")
+--end
 function mountup()
 	if IsControlKeyDown() then 
 		Dismount()
@@ -1458,14 +1523,18 @@ function mountup()
 		AceComm.SendCommMessage(FSMB,"FSMB_AUTOMOUNT", UnitName("player"),"RAID")
 	end
 end
-function follow()
-	--This is meant to be in your alt-4 macro, and gets everyone to follow and assist the focus (meant to be your current window toon)
-		inInst,instType=IsInInstance()
-		if FSMB_tank==myname and (inInst and instType=="party") then return end
-		if not IsAltKeyDown() and not IsControlKeyDown() and not IsShiftKeyDown() then
-			FollowUnit(unitname(FSMB_raidleader))
-		end
-end
+--function follow()
+	----This is meant to be in your alt-4 macro, and gets everyone to follow and assist the focus (meant to be your current window toon)
+		--inInst,instType=IsInInstance()
+		--if FSMB_tank==myname and (inInst and instType=="party") then return end
+		--if not IsAltKeyDown() and not IsControlKeyDown() and not IsShiftKeyDown() then
+			--FollowUnit(unitname(FSMB_raidleader))
+		--end
+--end
+--function assist()
+	--print("Assisting "..FSMB_raidleader)
+	--FocusUnit(unitname(FSMB_raidleader))
+--end
 function automount()
 	inInst,instType=IsInInstance()
 	if GetZoneText()=="The Maw" and SecureCmdOptionParse"[nodead,nomod,nocombat,nomounted]" then C_MountJournal.SummonByID(1442) 
