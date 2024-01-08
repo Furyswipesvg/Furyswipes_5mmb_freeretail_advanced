@@ -1,11 +1,11 @@
 FSMB_version="111419_retail"
 AceComm=LibStub("AceComm-3.0")
 print('Hello from 5mmb version '..FSMB_version.."!")
-FSMB_toonlist={[1]="Babadoink",[2]="Choinker",[3]="Badoinker",[4]="Doinkado",[5]="Spadoink",[6]="Galdric",[7]="Bauldric",[8]="Janette",[9]="Ror",[10]="Barey"}
-FSMB_invitelist={[1]="Babadoink-bladefist",[2]="Choinker-bladefist",[3]="Badoinker-bladefist",[4]="Doinkado-bladefist",[5]="Spadoink-bladefist",[6]="Galdric-bladefist",[7]="Bauldric-bladefist",[8]="Janette-bladefist",[9]="Ror-bladefist",[10]="Barey-bladefist"}
-FSMB_tank="Babadoink"
+FSMB_toonlist={[1]="Furyswipes",[2]="Badoinker",[3]="Springvalley",[4]="Elonlnside",[5]="Skullspriest",[6]="Chaostard"}
+FSMB_invitelist={[1]="Furyswipes-bladefist",[2]="Badoinker-bladefist",[3]="Springvalley-bladefist",[4]="Elonlnside-bladefist",[5]="Skullspriest-bladefist",[6]="Chaostard-bladefist"}
+FSMB_tank="Furyswipes"
 FSMB_nomacros=nil
-FSMB_healerlist={"Badoinker","Janette"}
+FSMB_healerlist={"Skullspriest"}
 FSMB_maxheal={Druid=3,Priest=3,Shaman=5,Paladin=3}
 FSMB_mypoly={["Priest"]="Shackle",["Mage"]="Polymorph",["Druid"]="Hibernate",["Warlock"]="Banish"}
 FSMB_myint={["Paladin"]="Hammer of Justice",["Priest"]="Silence",["Mage"]="Counterspell",["Druid"]="Bash",["Shaman"]="Earth Shock",["Hunter"]="Scatter Shot",["Warlock"]="",["Warrior"]="Pummel",["Rogue"]="Kick",}
@@ -178,6 +178,7 @@ FSMB_myint={["DEATHKNIGHT"]=(mindfreeze),["DEMONHUNTER"]=(disrupt),["MONK"]=(spe
 FSMB_myint["PALADIN"]=rebuke
 FSMB_decurse={["MONK"]=(detox),["DEMONHUNTER"]=(consumeMagic),["PALADIN"]=(palaCleanse),["PRIEST"]=(dispelMagic),["MAGE"]=(remLesserCurse),["DRUID"]=(remCurse),["SHAMAN"]=(curePoison),["HUNTER"]="None",["WARLOCK"]="None",["WARRIOR"]="None",["ROGUE"]="None",}
 FSMB_heal_names={["MONK"]=(vivify),["PALADIN"]=(palaHeal),["PRIEST"]=(priestHeal),["DRUID"]=(druidHeal),["SHAMAN"]=(shamanHeal)}
+FSMB_rez_spells={["PALADIN"]=(resurrection),["PRIEST"]=(resurrection),["SHAMAN"]=(ancestralSpirit)}
 FSMB_mydecurse=FSMB_decurse[UnitClass("player")]
 function SortRaid()
 	FSMB_toonorder=TableReverse(FSMB_toonlist)
@@ -228,6 +229,9 @@ function FindInTable(table,string)
 		if v==string then return i end
 	end
 	return nil
+end
+function InCombat()
+	if UnitAffectingCombat("player") then return true end
 end
 function init()
 	if UnitAffectingCombat("player") then return end
@@ -291,6 +295,20 @@ local myname=UnitName("player")
 local myclass=UnitClass("player")
 local mylevel=UnitLevel("player")
 clearmacros()
+	local macroId = CreateMacroFS("squads_fs", "Ability_HUNTER_pathfinding", "/run PartyUp(\"squads\")" , personal);
+	PickupMacro(macroId)
+	PlaceAction(9)
+	PickupMacro(macroId)
+	PlaceAction(21)
+	PickupMacro(macroId)
+	PlaceAction(81)
+	PickupMacro(macroId)
+	PlaceAction(93)
+	PickupMacro(macroId)
+	PlaceAction(105)
+	PickupMacro(macroId)
+	PlaceAction(117)
+	ClearCursor()
 	local macroId = CreateMacroFS("party_fs", "Ability_HUNTER_pathfinding", "/run PartyUp()" , personal);
 	PickupMacro(macroId)
 	PlaceAction(10)
@@ -305,7 +323,7 @@ clearmacros()
 	PickupMacro(macroId)
 	PlaceAction(118)
 	ClearCursor()
-	local macroId = CreateMacroFS("delete_trash", "Ability_HUNTER_pathfinding", "/run AutoDelete()" , personal);
+	local macroId = CreateMacroFS("delete_trash_fs", "Ability_HUNTER_pathfinding", "/run AutoDelete()" , personal);
 	PickupMacro(macroId)
 	PlaceAction(11)
 	PickupMacro(macroId)
@@ -369,12 +387,14 @@ clearmacros()
 				end
 			elseif myClass=="DRUID" and myspec=="RESTORATION" then
 				if FSMB_toonlist[i]==myname then
-					heallist="\n/castsequence [@player] reset=combat/30 "..efflorescence..","..swiftmend..","..rejuvenation..","..","..lifebloom..","..rejuvenation..","..regrowth..","..regrowth.."\n/cast [@player] ironbark"
+					heallist="\n/castsequence [noform,@player] reset=combat/30 "..efflorescence..","..swiftmend..","..rejuvenation..","..","..lifebloom..","..rejuvenation..","..regrowth..","..regrowth.."\n/cast [noform,@player] ironbark"
 				else
 					heallist="\n/target "..FSMB_toonlist[i].."\n/castsequence [nomod] reset=combat/10 "..efflorescence..","..swiftmend..","..rejuvenation..","..lifebloom..","..rejuvenation..","..regrowth..","..regrowth..","..regrowth.."\n/cast ironbark"
 				end
 			elseif myClass=="MONK" and myspec=="BREWMASTER" and FSMB_toonlist[i]==myname then
 				heallist="\n/cast [nochanneling] Expel Harm\n/cast [@player,nochanneling] vivify"
+			elseif myClass=="DRUID" and myspec=="GUARDIAN" then
+				heallist="\n/cast [noform:1,@"..FSMB_toonlist[i].."] "..FSMB_heal_names[myClass]
 			else
 				heallist="\n/cast [@"..FSMB_toonlist[i].."] "..FSMB_heal_names[myClass]
 			end
@@ -393,12 +413,6 @@ clearmacros()
 			ClearCursor()
 			idx=idx+1
 		end
-	end
-	if myClass=="DRUID" then
-		macroId = CreateMacroFS("rebirth_fs", "spell_nature_reincarnation", "\n/cancelform\n/cast "..druidRebirth.."", nil);
-		PickupMacro(macroId)
-		PlaceAction(68)
-		ClearCursor()
 	end
 	for i=1,TableLength(FSMB_toonlist) do
 		macroId=nil
@@ -478,67 +492,24 @@ clearmacros()
 			PickupMacro(macroId)
 			PlaceAction(62)
 			ClearCursor()
-			local slot=72
-			macroId = CreateMacroFS("b1_fs", "INV_Misc_QuestionMark", "/cast [@player] "..pwFortitude.."", nil);
-			PickupMacro(macroId)
-			PlaceAction(slot)
+			--local slot=72
+			--macroId = CreateMacroFS("b1_fs", "INV_Misc_QuestionMark", "/cast [@player] "..pwFortitude.."", nil);
+			--PickupMacro(macroId)
+			--PlaceAction(slot)
 			macroId = CreateMacroFS("bufft_fs", "INV_Misc_QuestionMark", "/castsequence reset=combat/target "..pwFortitude..",null", personal);
 		end
 		if myClass=="PALADIN" or myClass=="SHAMAN" or myClass=="DRUID" or myClass =="MONK" or myClass =="PRIEST" or myClass=="DEATHKNIGHT" then
-			if FSMB_myrez[myClass] then
-				local rezlist=""
-				local rezzers={}
-				local nonrezzers={}
-				if myClass=="PRIEST" and myspec=="HOLY" then 
-					macroId = CreateMacroFS("rez_fs", "INV_Misc_QuestionMark", "/cast "..massRes, nil);
-					PickupMacro(macroId)
-					PlaceAction(8)
-					GrabSpell(massRes)
-					PlaceAction(68)
-					ClearCursor()
-				elseif myClass=="SHAMAN" and myspec=="RESTOSHAM" then 
-					macroId = CreateMacroFS("rez_fs", "INV_Misc_QuestionMark", "/cast "..ancestralVision, nil);
-					PickupMacro(macroId)
-					PlaceAction(8)
-					GrabSpell(ancestralVision)
-					PlaceAction(68)
-					ClearCursor()
-				else
-					if myClass~="DRUID" then
-						GrabSpell(FSMB_myrez[myClass])
-						PlaceAction(8)
-						ClearCursor()
-					end
-				end
-			end
-		end
-		if myClass=="DRUID" then
-				GrabSpell(FSMB_myrez[myClass])
-				PlaceAction(8)
-				GrabSpell(FSMB_myrez[myClass])
-				PlaceAction(20)
-				GrabSpell(FSMB_myrez[myClass])
-				PlaceAction(80)
-				GrabSpell(FSMB_myrez[myClass])
-				PlaceAction(92)
-				GrabSpell(FSMB_myrez[myClass])
-				PlaceAction(104)
-				GrabSpell(FSMB_myrez[myClass])
-				PlaceAction(116)
-				ClearCursor()
-			macroId = CreateMacroFS("rebirth_fs", "spell_nature_reincarnation", "\n/cancelform\n/cast "..druidRebirth.."", nil);
+			macroId = CreateMacroFS("REZ_FS_"..myspec, "INV_Misc_QuestionMark", "#showtooltip\n/click [button:1] REZ_FS_"..myspec.." LeftButton t; REZ_FS_"..myspec , nil);
 			PickupMacro(macroId)
-			PlaceAction(9)
+			PlaceAction(8)
 			PickupMacro(macroId)
-			PlaceAction(21)
+			PlaceAction(80)
 			PickupMacro(macroId)
-			PlaceAction(81)
+			PlaceAction(92)
 			PickupMacro(macroId)
-			PlaceAction(93)
+			PlaceAction(104)
 			PickupMacro(macroId)
-			PlaceAction(105)
-			PickupMacro(macroId)
-			PlaceAction(117)
+			PlaceAction(116)
 			ClearCursor()
 		end
 		if myClass=="WARLOCK" and SpellExists(drainSoul) then
@@ -561,13 +532,13 @@ clearmacros()
 				PlaceAction(12)
 				ClearCursor()
 			end
-				GrabSpell(prismaticBarrier)
-				PlaceAction(71)
-				ClearCursor()
-				macroId = CreateMacroFS("b1_fs", "INV_Misc_QuestionMark", "/cast [@player] "..arcaneIntellect.."", nil);
-				PickupMacro(macroId)
-				PlaceAction(72)
-				ClearCursor()
+				--GrabSpell(prismaticBarrier)
+				--PlaceAction(71)
+				--ClearCursor()
+				--macroId = CreateMacroFS("b1_fs", "INV_Misc_QuestionMark", "/cast [@player] "..arcaneIntellect.."", nil);
+				--PickupMacro(macroId)
+				--PlaceAction(72)
+				--ClearCursor()
 			macroId = CreateMacroFS("bufft_fs", "INV_Misc_QuestionMark", "/castsequence reset=combat/target "..arcaneIntellect.."", personal);
 			PickupAction(12)
 			ClearCursor()
@@ -653,7 +624,7 @@ clearmacros()
 			PlaceAction(111)
 		end
 		ClearCursor()
-		index=CreateMacroFS("TURBO_FS_"..myspec,"Spell_nature_lightning","#showtooltip\n/click [button:1] TURBO_FS_"..myspec.." LeftButton t;\n/petpassive [mod:alt]\n/run SetView(4)",hunterpersonal)
+		index=CreateMacroFS("TURBO_FS_"..myspec,"Spell_nature_lightning","#showtooltip\n/click [button:1] TURBO_FS_"..myspec.." LeftButton t;\n/petpassive [mod:alt]\n/run mountup()\n/run SetView(4)",hunterpersonal)
 		PickupMacro(index)
 		PlaceAction(4)
 		if myClass=="ROGUE" then
@@ -733,6 +704,27 @@ clearmacros()
 --PickupMacro(macroId)
 --PlaceAction(59)
 --ClearCursor()
+	local macroId = CreateMacroFS("convP_fs", "Ability_HUNTER_pathfinding", "/run C_PartyInfo.ConvertToParty()" , personal);
+	PickupMacro(macroId)
+	PlaceAction(72)
+	ClearCursor()
+	local macroId = CreateMacroFS("Hide5_fs", "Ability_HUNTER_pathfinding", "/run MultiBar5:Hide()" , personal);
+	PickupMacro(macroId)
+	PlaceAction(71)
+	ClearCursor()
+	local macroId = CreateMacroFS("wave_fs", "Ability_HUNTER_pathfinding", "/wave" , personal);
+	PickupMacro(macroId)
+	PlaceAction(70)
+	ClearCursor()
+	if myname=="Chaostard" or myname=="Booyah" then
+		for i=1,9 do
+			--PartyUp(9) means start inviting second raid.
+			local macroId = CreateMacroFS("party"..i.."_fs", "Ability_HUNTER_pathfinding", "/run PartyUp("..i..")" , personal);
+			PickupMacro(macroId)
+			PlaceAction(60+i)
+			ClearCursor()
+		end
+	end
 local partymac=""
 for i=1,TableLength(FSMB_toonlist) do
 	partymac=partymac.."/invite "..FSMB_toonlist[i].."\n"
@@ -832,13 +824,14 @@ end
 	SetCVar("ShowClassColorInFriendlyNameplate", true)
 	SetCVar("showTargetOfTarget", true)
 	SetModifiedClick("SELFCAST","NONE")
-	--SetActionBarToggles(true,true,true,true,true)
-	--SHOW_MULTI_ACTIONBAR_1=true
-	--SHOW_MULTI_ACTIONBAR_2=true
-	--SHOW_MULTI_ACTIONBAR_3=true
-	--SHOW_MULTI_ACTIONBAR_4=true
-	--ALWAYS_SHOW_MULTI_ACTIONBAR=1
+	SetActionBarToggles(true,true,true,true,true)
+	ALWAYS_SHOW_MULTI_ACTIONBAR=1
+	SHOW_MULTI_ACTIONBAR_1=true
+	SHOW_MULTI_ACTIONBAR_2=true
+	SHOW_MULTI_ACTIONBAR_3=true
+	SHOW_MULTI_ACTIONBAR_4=true
 	MultiActionBar_Update()
+	MultiBar5:Hide()
 	ClearTutorials()
 	ReloadUI()
 end
@@ -899,7 +892,7 @@ function DeleteMacroFS(indexorname)
 end
 function clearmacros()
   print("Clearing Macros...")
- MB_macronamestodelete={ "init_fs","focus_fs","sdm_fs","aux1_fs","aux2_fs","aux3_fs","follow_fs","rsingle","rmulti","rebirth","hearth","pet","spit","bufft","self","healpot","manapot","tot","rez","setup","pull","feign","shackle","feed","single","multi","selfh","decurse","reload","dance","leave","makealine","drink","buff","healtank","aoe","turbo","int","passive","poly","h1","h2","h3","h4","h5","f1","f2","f3","f4","f5","a1","a2","a3","a4","a5","party","b0","b1","b2","b3","b4","b5","rSINGLE_FS","rmulti_fs","rebirth_fs","hearth_fs","pet_fs","spit_fs","bufft_fs","self_fs","healpot_fs","manapot_fs","tot_fs","rez_fs","FARM_fs","setup_fs","pull_fs","feign_fs","shackle_fs","feed_fs","SINGLE_FS","multi_fs","selfh_fs","decurse_fs","reload_fs","dance_fs","leave_fs","makealine_fs","drink_fs","buff_fs","healtank_fs","sheal_fs","aoe_fs","turbo_fs","int_fs","passive_fs","poly_fs","h1_fs","h2_fs","h3_fs","h4_fs","h5_fs","f1_fs","f2_fs","f3_fs","f4_fs","f5_fs","a1_fs","a2_fs","a3_fs","a4_fs","a5_fs","a6_fs","a7_fs","a8_fs","a9_fs","a10_fs","party_fs","b0_fs","b1_fs","b2_fs","b3_fs","b4_fs","b5_fs","h6_fs","h7_fs","h8_fs","h9_fs","h10_fs","f6_fs","f7_fs","f8_fs","f9_fs","f10_fs","f11_fs","f12_fs","f13_fs","f14_fs","f15_fs","f16_fs","f17_fs","f18_fs","f19_fs","f20_fs","a6_fs","a7_fs","a8_fs","a9_fs","a10_fs"}
+ MB_macronamestodelete={ "convP","Hide5","convP_fs","Hide5_fs","init_fs","focus_fs","sdm_fs","aux1_fs","aux2_fs","aux3_fs","follow_fs","rsingle","rmulti","rebirth","hearth","pet","spit","bufft","self","healpot","manapot","tot","rez","setup","pull","feign","shackle","feed","single","multi","selfh","decurse","reload","dance","leave","makealine","drink","buff","healtank","aoe","turbo","int","passive","poly","h1","h2","h3","h4","h5","f1","f2","f3","f4","f5","a1","a2","a3","a4","a5","party","b0","b1","b2","b3","b4","b5","rSINGLE_FS","rmulti_fs","rebirth_fs","hearth_fs","pet_fs","spit_fs","bufft_fs","self_fs","healpot_fs","manapot_fs","tot_fs","rez_fs","FARM_fs","setup_fs","pull_fs","feign_fs","shackle_fs","feed_fs","SINGLE_FS","multi_fs","selfh_fs","decurse_fs","reload_fs","dance_fs","leave_fs","makealine_fs","drink_fs","buff_fs","healtank_fs","sheal_fs","aoe_fs","turbo_fs","int_fs","passive_fs","poly_fs","h1_fs","h2_fs","h3_fs","h4_fs","h5_fs","f1_fs","f2_fs","f3_fs","f4_fs","f5_fs","a1_fs","a2_fs","a3_fs","a4_fs","a5_fs","a6_fs","a7_fs","a8_fs","a9_fs","a10_fs","party_fs","squads_fs","b0_fs","b1_fs","b2_fs","b3_fs","b4_fs","b5_fs","h6_fs","h7_fs","h8_fs","h9_fs","h10_fs","f6_fs","f7_fs","f8_fs","f9_fs","f10_fs","f11_fs","f12_fs","f13_fs","f14_fs","f15_fs","f16_fs","f17_fs","f18_fs","f19_fs","f20_fs","a6_fs","a7_fs","a8_fs","a9_fs","a10_fs","party1_fs","party2_fs","party3_fs","party4_fs","party5_fs","party6_fs","party7_fs","party8_fs","raid2_fs","delete_trash","delete_trash_fs","party9_fs"}
  
 MB_allspecs = {"PROTECTION","ARMS","FURY","UNHOLY","FROSTDK","BLOOD","RESTORATION","GUARDIAN","FERAL","BALANCE","ARCANE","FIRE","FROST","RESTOSHAM","ENHANCEMENT","ELEMENTAL","SURVIVAL","MARKSMANSHIP","BEASTMASTERY","SHADOW","HOLY","DISCIPLINE","SUBTLETY","OUTLAW","ASSASINATION","WINDWALKER","MISTWEAVER","BREWMASTER","VENGEANCE","HAVOC","DESTRUCTION","DEMONOLOGY","AFFLICTION","HOLYPAL","PROTPAL", "RETRIBUTION" }
 MB_allmactypes = {"SETUP_FS","MULTI_FS_","TURBO_FS_","AOE_FS_","SHEAL_FS_","SINGLE_FS_","single_fs_","setup_fs_","multi_fs_","turbo_fs_","aoe_fs_","sheal_fs_"}
@@ -1517,10 +1510,10 @@ end
 function mountup()
 	if IsControlKeyDown() then 
 		Dismount()
-		AceComm.SendCommMessage(FSMB,"FSMB_DISMOUNT", UnitName("player"),"RAID")
+		--AceComm.SendCommMessage(FSMB,"FSMB_DISMOUNT", UnitName("player"),"RAID")
 	else
 		automount()
-		AceComm.SendCommMessage(FSMB,"FSMB_AUTOMOUNT", UnitName("player"),"RAID")
+		--AceComm.SendCommMessage(FSMB,"FSMB_AUTOMOUNT", UnitName("player"),"RAID")
 	end
 end
 --function follow()
@@ -1595,12 +1588,40 @@ function buystacks()
 	end end
 end
 	
-function PartyUp()
+function PartyUp(groupno)
+--This will invite a particular group from 1-8 in the toonlist or it will start raid2 if you give it group9. (everyone above 40 in list)
 	local partymac=""
 	FSMB_raidleader=myname
+	if groupno=="squads" then
+	--In squads, the first n/5 people become squad leaders. They start inviting at the first non-squad-leader.
+		numsquads=TableLength(FSMB_invitelist)/5
 		for i=1,TableLength(FSMB_invitelist) do
-			DEFAULT_CHAT_FRAME.editBox:SetText("/invite "..FSMB_invitelist[i]) ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
+			basename=FSMB_invitelist[i]:gsub("-%w+$", "")
+			if i>numsquads then
+				if not unitname(basename) then
+					print("Inviting "..basename)
+					DEFAULT_CHAT_FRAME.editBox:SetText("/invite "..FSMB_invitelist[i]) ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
+				end
+			end	
 		end
+	else
+		for i=1,TableLength(FSMB_invitelist) do
+			invite_this_guy=true
+			ongroup=math.floor((i-1)/5+1)
+			basename=FSMB_invitelist[i]:gsub("-%w+$", "")
+			if groupno then
+				if (groupno<9 and groupno~=ongroup) or (groupno==9 and ongroup<9) then
+					invite_this_guy=false
+				end
+			end
+			if invite_this_guy then
+				if not unitname(basename) then
+					print("Inviting "..basename)
+					DEFAULT_CHAT_FRAME.editBox:SetText("/invite "..FSMB_invitelist[i]) ChatEdit_SendText(DEFAULT_CHAT_FRAME.editBox, 0)
+				end
+			end	
+		end
+	end
 	SetLootMethod("freeforall",UnitName("player"))
 end
 
@@ -1674,4 +1695,10 @@ function AutoDelete()
 		end
 	end end
 end
-
+function getdeadguy()
+ for i=1,GetNumGroupMembers() do
+  local name,_,_,_,_,_,_,_,isdead=GetRaidRosterInfo(i)
+  if isdead then return "@"..name end
+ end
+ return "@nobody"
+end
