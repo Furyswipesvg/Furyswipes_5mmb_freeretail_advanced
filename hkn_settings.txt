@@ -25,7 +25,6 @@ bStartHidden = false
 bDoNotShowSplash = true
 acPassword = [null]
 bClearModifiers = false
-rectMainWindow = 3011, 1590, 3759, 2113
 bUseWinsockBuffering = false
 bUseNagleAlgorithm = false
 bPartialWindowNameMatch = true
